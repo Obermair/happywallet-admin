@@ -1,4 +1,5 @@
-![Uploading logo2.png…]()
+<img width="1687" height="764" alt="logo2" src="https://github.com/user-attachments/assets/624b8f3c-34ec-462e-b775-495279356ae0" />
+
 
 # happy wallet admin dashboard
 
