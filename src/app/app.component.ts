@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { DataService } from './data.service';
 
 @Component({
   selector: 'app-root',
@@ -11,5 +12,11 @@ import { RouterModule } from '@angular/router';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'Angular Ecommerce Dashboard | TailAdmin';
+  title = 'happywallet - your digital loyalty card';
+
+  constructor(public dataService: DataService) {}
+
+  ngOnInit(): void {
+    this.dataService.signIn("mail@burgerlion.com", "asdfasdf");
+  }
 }

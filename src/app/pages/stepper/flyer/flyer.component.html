@@ -1,0 +1,49 @@
+<div class="flex justify-between w-full mb-6">
+    <app-button (click)="linkToFlyer()" [disabled]="false" size="sm" [startIcon]="stepperService.previousIcon" variant="outline">
+        Vorheriger Schritt
+    </app-button>
+    <app-button (click)="createLoyaltyCard()" [disabled]="false" size="sm" [endIcon]="stepperService.nextIcon" variant="outline">
+        Stempelkarte erstellen
+    </app-button>
+</div>
+<div class="flex grid grid-cols-1 gap-5 sm:grid-cols-1 lg:grid-cols-2">
+    <div>
+        <app-component-card title="Flyer bearbeiten" desc="Passen Sie den Flyer an, den Kunden herunterladen können, um Ihre digitale Treuekarte zu erhalten.">
+            <div>
+                <app-label>Überschrift</app-label>
+                <app-input-field [value]="stepperService.flyerData.flyerHeading" (valueChange)="stepperService.flyerData.flyerHeading = $event; updatePdf()"  type="text" placeholder="Treten Sie unserem Treueprogramm bei!" />
+            </div>
+            <div>
+                <app-label>Scan Anweisung</app-label>
+                <app-input-field  [value]="stepperService.flyerData.flyerScanInfo" (valueChange)="stepperService.flyerData.flyerScanInfo = $event; updatePdf()" type="text" placeholder="Scannen Sie den QR-Code, und fügen Sie Ihre Stempelkarte Ihrer Apple oder Google Wallet hinzu." />
+            </div>
+        </app-component-card>
+    </div>
+    <div>
+        <app-component-card title="Flyervorschau" desc="Sehen Sie, wie Ihr Flyer für Kunden aussehen wird.">
+            <div class="rounded-2xl flex flex-col items-center justify-center bg-white">
+                <pdf-viewer 
+                style="border-radius: 15px;"
+                [src]="pdfSrc"
+                *ngIf="pdfSrc"
+                (after-load-complete)="onPdfLoad($event)"
+                (error)="onPdfError($event)"
+                [render-text]="true"
+                style="display:block; width:90%; height:80vh;"
+                [original-size]="false"
+                [fit-to-page]="true">
+                </pdf-viewer>
+                <app-button
+                    (click)="downloadPdf()"
+                    class="w-full mt-4"  
+                    size="md"
+                    variant="outline"
+                    [startIcon]="stepperService.downloadIcon"
+                >
+                    <div class="w-full flex justify-center">Flyer herunterladen</div>
+                </app-button>
+            </div>
+        </app-component-card>
+    </div>
+</div>
+

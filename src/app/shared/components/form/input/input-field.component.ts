@@ -1,5 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR
+} from '@angular/forms';
 
 @Component({
   selector: 'app-input-field',
@@ -16,6 +20,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
         [max]="max"
         [step]="step"
         [disabled]="disabled"
+        [readonly]="readonly"
         [ngClass]="inputClasses"
         (input)="onInput($event)"
       />
@@ -32,6 +37,13 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
       }
     </div>
   `,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputFieldComponent),
+      multi: true
+    }
+  ]
 })
 export class InputFieldComponent {
 
@@ -44,12 +56,13 @@ export class InputFieldComponent {
   @Input() max?: string;
   @Input() step?: number;
   @Input() disabled: boolean = false;
+  @Input() readonly: boolean = false;
   @Input() success: boolean = false;
   @Input() error: boolean = false;
   @Input() hint?: string;
   @Input() className: string = '';
 
-  @Output() valueChange = new EventEmitter<string | number>();
+  @Output() valueChange = new EventEmitter<string>();
 
   get inputClasses(): string {
     let inputClasses = `h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 ${this.className}`;
@@ -68,6 +81,6 @@ export class InputFieldComponent {
 
   onInput(event: Event) {
     const input = event.target as HTMLInputElement;
-    this.valueChange.emit(this.type === 'number' ? +input.value : input.value);
+    this.valueChange.emit(input.value);
   }
 }

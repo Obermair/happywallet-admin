@@ -1,9 +1,18 @@
 <div class="relative">
   <button (click)="toggleDropdown()" class="flex items-center text-gray-700 dropdown-toggle dark:text-gray-400">
+  <ng-container *ngIf="dataService.currentUser?.shopLogo?.url; else avatar">
+    <img 
+      [src]="dataService.apiUrl + dataService.currentUser.shopLogo.url" 
+      alt="Shop Logo"
+      class="w-12 h-12 rounded-full object-cover" />
+  </ng-container>
+
+  <ng-template #avatar>
     <app-avatar-text 
-    name="David Obermair" 
-    class="w-10 h-10"/>
-    <span class="block mr-1 ml-2 font-medium text-theme-sm">David Obermair</span>
+      [name]="dataService.currentUser?.username" 
+      class="w-12 h-12"/>
+  </ng-template>
+    <span class="block mr-1 ml-2 font-medium text-theme-sm">{{ dataService.currentUser?.username }}</span>
     <svg [ngClass]="{
         'stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200': true,
         'rotate-180': isOpen

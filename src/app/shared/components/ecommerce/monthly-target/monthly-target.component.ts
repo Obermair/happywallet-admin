@@ -54,7 +54,7 @@ export class MonthlyTargetComponent {
   };
   public fill: ApexFill = {
     type: 'solid',
-    colors: ['#465FFF'],
+    colors: ['#c38e70'],
   };
   public stroke: ApexStroke = {
     lineCap: 'round',

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DropdownItemTwoComponent } from '../../ui/dropdown/dropdown-item/dropdown-item.component-two';
 import { AvatarTextComponent } from '../../ui/avatar/avatar-text.component';
+import { DataService } from '../../../../data.service';
 
 @Component({
   selector: 'app-user-dropdown',
@@ -12,6 +13,8 @@ import { AvatarTextComponent } from '../../ui/avatar/avatar-text.component';
 })
 export class UserDropdownComponent {
   isOpen = false;
+
+  constructor(public dataService: DataService) {}
 
   toggleDropdown() {
     this.isOpen = !this.isOpen;

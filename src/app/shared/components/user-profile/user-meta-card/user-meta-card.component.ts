@@ -12,8 +12,7 @@ import { AvatarTextComponent } from '../../ui/avatar/avatar-text.component';
     CommonModule,
     ModalComponent,
     InputFieldComponent,
-    ButtonComponent,
-    AvatarTextComponent
+    ButtonComponent
   ],
   templateUrl: './user-meta-card.component.html',
   styles: ``

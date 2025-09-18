@@ -1,0 +1,77 @@
+<div>
+  <app-page-breadcrumb pageTitle="Meine Stempelkarten" />
+  <div class="min-h-screen rounded-2xl border border-gray-200 bg-white px-2 py-2 dark:border-gray-800 dark:bg-white/[0.03] lg:px-10 lg:py-10">
+    <div class="w-full flex justify-end">
+      <app-button (click)="handleCreateNewCard()" size="sm" [endIcon]="addIcon">
+        Neue Stempelkarte
+      </app-button>
+    </div>
+    <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-1 lg:grid-cols-2">
+      <app-component-card title="Stempelkarte 1">
+        <div class="flex items-center flex-col">
+            <div class="w-full flex flex-row justify-between">
+                <div class="flex flex-col">
+                    <div class="pt-3 ml-5">
+                        <app-switch
+                        label="Aktiv"
+                        [defaultChecked]="true"
+                        (valueChange)="handleSwitchChange($event)"
+                        ></app-switch>
+                    </div>
+                    <div class="rounded-2xl w-full flex flex-row items-center bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:mr-4">
+                        <div class="flex items-center justify-center w-18 h-18 bg-gray-100 rounded-xl dark:bg-gray-800" [innerHTML]="groupIcon | safeHtml">
+                        </div>
+                        <div class="flex items-end justify-between ml-4">
+                            <div>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">Aktive Kunden</span>
+                            <h4 class="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">24</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div >
+                    <qr-code [value]="signupLink"
+                    class="rounded-2xl"
+                    size="150" 
+                    errorCorrectionLevel="M" />
+                </div>
+            </div>
+            <div class="w-full p-2 relative">
+                <app-input-field
+                    [value]="signupLink"
+                    class="form-input"
+                    [readonly]="true"
+                />
+                <span
+                class="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
+                (click)="copyToClipboard(signupLink)"
+                [innerHTML]="copyIcon | safeHtml"
+                ></span>
+            </div>
+            <div class="flex gap-2 w-full dark:bg-white/[0.03] p-2 rounded-lg">
+                <app-button
+                    class="w-full"
+                    size="md"
+                    variant="outline"
+                    [startIcon]="editIcon"
+                >
+                     <div class="w-full flex justify-center">Bearbeiten</div>
+                </app-button>
+
+                <app-button
+                    class="w-full"  
+                    size="md"
+                    variant="outline"
+                    [startIcon]="downloadIcon"
+                >
+                    <div class="w-full flex justify-center">Flyer herunterladen</div>
+                </app-button>
+            </div>
+
+
+        </div>
+      </app-component-card>
+    </div>
+  </div>
+</div>
+

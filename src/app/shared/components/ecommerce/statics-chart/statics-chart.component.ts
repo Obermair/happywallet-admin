@@ -42,7 +42,7 @@ export class StatisticsChartComponent {
     toolbar: { show: false }
   };
 
-  public colors: string[] = ['#465FFF', '#9CB9FF'];
+  public colors: string[] = ['#c38e70', '#d69f7e'];
 
   public stroke: ApexStroke = {
     curve: 'straight',
@@ -91,7 +91,7 @@ export class StatisticsChartComponent {
     labels: {
       style: {
         fontSize: '12px',
-        colors: ['#6B7280']
+        colors: ['#d69f7e']
       }
     },
     title: {

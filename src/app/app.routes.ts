@@ -18,11 +18,18 @@ import { VideosComponent } from './pages/ui-elements/videos/videos.component';
 import { SignInComponent } from './pages/auth-pages/sign-in/sign-in.component';
 import { SignUpComponent } from './pages/auth-pages/sign-up/sign-up.component';
 import { CalenderComponent } from './pages/calender/calender.component';
+import { AuthGuardService } from './auth-guard.service';
+import { LoyaltyProgramsComponent } from './pages/loyalty-programs/loyalty-programs/loyalty-programs.component';
+import { StepperComponent } from './pages/stepper/stepper.component';
+import { CardComponent } from './pages/stepper/card/card.component';
+import { FormComponent } from './pages/stepper/form/form.component';
+import { FlyerComponent } from './pages/stepper/flyer/flyer.component';
 
 export const routes: Routes = [
   {
     path:'',
-    component:AppLayoutComponent,
+    component:AppLayoutComponent, 
+    canActivate: [AuthGuardService],
     children:[
       {
         path: '',
@@ -32,75 +39,102 @@ export const routes: Routes = [
           'happywallet - your digital loyalty card',
       },
       {
+        path: 'loyalty-programs',
+        component: LoyaltyProgramsComponent,
+        title: 'happywallet - your digital loyalty card',
+      },
+      {
+          path: 'loyalty-programs/create',
+          component: StepperComponent, 
+          title: 'happywallet - your digital loyalty card',
+          children: [
+            {
+              path: 'card',
+              component: CardComponent,
+              title: 'happywallet - your digital loyalty card'
+            },
+            {
+              path: 'form',
+              component: FormComponent,
+              title: 'happywallet - your digital loyalty card'
+            },
+            {
+              path: 'flyer',
+              component: FlyerComponent,
+              title: 'happywallet - your digital loyalty card'
+            }
+          ]      
+      },
+      {
         path:'calendar',
         component:CalenderComponent,
-        title:'Angular Calender | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card'
       },
       {
         path:'profile',
         component:ProfileComponent,
-        title:'Angular Profile Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card',
       },
       {
         path:'form-elements',
         component:FormElementsComponent,
-        title:'Angular Form Elements Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card'
       },
       {
         path:'basic-tables',
         component:BasicTablesComponent,
-        title:'Angular Basic Tables Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card'
       },
       {
         path:'blank',
         component:BlankComponent,
-        title:'Angular Blank Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card'
       },
       // support tickets
       {
         path:'invoice',
         component:InvoicesComponent,
-        title:'Angular Invoice Details Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card'
       },
       {
         path:'line-chart',
         component:LineChartComponent,
-        title:'Angular Line Chart Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card'
       },
       {
         path:'bar-chart',
         component:BarChartComponent,
-        title:'Angular Bar Chart Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card'
       },
       {
         path:'alerts',
         component:AlertsComponent,
-        title:'Angular Alerts Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card'
       },
       {
         path:'avatars',
         component:AvatarElementComponent,
-        title:'Angular Avatars Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card'
       },
       {
         path:'badge',
         component:BadgesComponent,
-        title:'Angular Badges Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card'
       },
       {
         path:'buttons',
         component:ButtonsComponent,
-        title:'Angular Buttons Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card'
       },
       {
         path:'images',
         component:ImagesComponent,
-        title:'Angular Images Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card'
       },
       {
         path:'videos',
         component:VideosComponent,
-        title:'Angular Videos Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'happywallet - your digital loyalty card'
       },
     ]
   },
@@ -108,17 +142,17 @@ export const routes: Routes = [
   {
     path:'signin',
     component:SignInComponent,
-    title:'Angular Sign In Dashboard | TailAdmin - Angular Admin Dashboard Template'
+    title:'happywallet - your digital loyalty card'
   },
   {
     path:'signup',
     component:SignUpComponent,
-    title:'Angular Sign Up Dashboard | TailAdmin - Angular Admin Dashboard Template'
+    title:'happywallet - your digital loyalty card'
   },
   // error pages
   {
     path:'**',
     component:NotFoundComponent,
-    title:'Angular NotFound Dashboard | TailAdmin - Angular Admin Dashboard Template'
+    title:'happywallet - your digital loyalty card'
   },
 ];
