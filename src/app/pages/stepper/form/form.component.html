@@ -2,7 +2,7 @@
     <app-button (click)="linkToCard()" [disabled]="false" size="sm" [startIcon]="stepperService.previousIcon" variant="outline">
         Vorheriger Schritt
     </app-button>
-    <app-button (click)="linkToFlyer()" [disabled]="false" size="sm" [endIcon]="stepperService.nextIcon" variant="outline">
+    <app-button (click)="linkToFlyer()" [disabled]="!isFormValid()" size="sm" [endIcon]="stepperService.nextIcon" variant="outline">
         Nächster Schritt
     </app-button>
 </div>
@@ -11,11 +11,11 @@
         <app-component-card title="Formular bearbeiten" desc="Passen Sie das Formular an, das Kunden ausfüllen, um Ihre digitale Treuekarte zu erhalten.">
             <div>
                 <app-label>Formularbeschreibung</app-label>
-                <app-input-field [value]="stepperService.formData.formDescription" (valueChange)="stepperService.formData.formDescription = $event"  type="text" placeholder="Bitte füllen Sie dieses Formular aus, um unserem Treueprogramm beizutreten." />
+                <app-input-field [value]="stepperService.loyaltyProgram.formDescription" (valueChange)="stepperService.loyaltyProgram.formDescription = $event"  type="text" placeholder="Bitte füllen Sie dieses Formular aus, um unserem Treueprogramm beizutreten." />
             </div>
             <div>
                 <app-label>Absende-Button Text</app-label>
-                <app-input-field  [value]="stepperService.formData.formSendButton" (valueChange)="stepperService.formData.formSendButton = $event" type="text" placeholder="Stempelkarte anfordern" />
+                <app-input-field  [value]="stepperService.loyaltyProgram.formSendButton" (valueChange)="stepperService.loyaltyProgram.formSendButton = $event" type="text" placeholder="Stempelkarte anfordern" />
             </div>
 
             <div class="max-w-full overflow-x-auto">
@@ -37,14 +37,14 @@
                         </td>
                         <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                             <app-switch
-                            [defaultChecked]="stepperService.formData.formNameField"
-                            (valueChange)="stepperService.formData.formNameField = $event"
+                            [defaultChecked]="stepperService.loyaltyProgram.formNameField"
+                            (valueChange)="stepperService.loyaltyProgram.formNameField = $event"
                             ></app-switch>
                         </td>
                         <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                             <app-switch
-                            [defaultChecked]="stepperService.formData.formNameFieldMandatory"
-                            (valueChange)="stepperService.formData.formNameFieldMandatory = $event"
+                            [defaultChecked]="stepperService.loyaltyProgram.formNameFieldMandatory"
+                            (valueChange)="stepperService.loyaltyProgram.formNameFieldMandatory = $event"
                             ></app-switch>
                         </td>
                     </tr>
@@ -71,14 +71,14 @@
                         </td>
                         <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                             <app-switch
-                            [defaultChecked]="stepperService.formData.formBirthdayField"
-                            (valueChange)="stepperService.formData.formBirthdayField = $event"
+                            [defaultChecked]="stepperService.loyaltyProgram.formBirthdayField"
+                            (valueChange)="stepperService.loyaltyProgram.formBirthdayField = $event"
                             ></app-switch>
                         </td>
                         <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                             <app-switch
-                            [defaultChecked]="stepperService.formData.formBirthdayFieldMandatory"
-                            (valueChange)="stepperService.formData.formBirthdayFieldMandatory = $event"
+                            [defaultChecked]="stepperService.loyaltyProgram.formBirthdayFieldMandatory"
+                            (valueChange)="stepperService.loyaltyProgram.formBirthdayFieldMandatory = $event"
                             ></app-switch>
                         </td>
                     </tr>
@@ -88,8 +88,8 @@
                         </td>
                         <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                             <app-switch
-                            [defaultChecked]="stepperService.formData.formMarketingConsent"
-                            (valueChange)="stepperService.formData.formMarketingConsent = $event"
+                            [defaultChecked]="stepperService.loyaltyProgram.formMarketingConsent"
+                            (valueChange)="stepperService.loyaltyProgram.formMarketingConsent = $event"
                             ></app-switch>
                         </td>
                     </tr>
@@ -101,7 +101,7 @@
     </div>
     <div>
         <app-component-card title="Formularvorschau" desc="So sieht dein Formular aus, wenn Kunden es ausfüllen, um deine Stempelkarte zu erhalten.">
-            <div class="max-w-md">
+            <div class="max-w-md w-full mx-auto">
                 <div class="p-4">
                     <div class="flex items-center justify-center mb-4">
                         <ng-container *ngIf="dataService.currentUser?.shopLogo?.url; else avatar">
@@ -118,21 +118,21 @@
                             <span class="block font-bold">{{ dataService.currentUser?.username }}</span>
                         </ng-template>
                     </div>
-                    <div class="text-md text-center text-gray-500 dark:text-gray-400 mb-4">{{ stepperService.formData.formDescription }}</div>
+                    <div class="text-md text-center text-gray-500 dark:text-gray-400 mb-4">{{ stepperService.loyaltyProgram.formDescription }}</div>
                     <form class="space-y-4">
-                        <div *ngIf="stepperService.formData.formNameField">
-                            <div class="flex flex-row"><app-label>Name</app-label><span *ngIf="stepperService.formData.formNameFieldMandatory" class="text-red-500 ml-1">*</span></div>
+                        <div *ngIf="stepperService.loyaltyProgram.formNameField">
+                            <div class="flex flex-row"><app-label>Name</app-label><span *ngIf="stepperService.loyaltyProgram.formNameFieldMandatory" class="text-red-500 ml-1">*</span></div>
                             <app-input-field type="text" placeholder="Geben Sie hier Ihren Namen ein" />
                         </div>
                         <div>
                             <app-label>E-Mail <span class="text-red-500">*</span></app-label>
                             <app-input-field type="email" placeholder="Geben Sie hier Ihre E-Mail-Adresse ein" />
                         </div>
-                        <div *ngIf="stepperService.formData.formBirthdayField">
-                            <div class="flex flex-row"><app-label>Geburtstag</app-label><span *ngIf="stepperService.formData.formBirthdayFieldMandatory" class="text-red-500 ml-1">*</span></div>
+                        <div *ngIf="stepperService.loyaltyProgram.formBirthdayField">
+                            <div class="flex flex-row"><app-label>Geburtstag</app-label><span *ngIf="stepperService.loyaltyProgram.formBirthdayFieldMandatory" class="text-red-500 ml-1">*</span></div>
                             <app-input-field type="date" placeholder="Wählen Sie Ihr Geburtsdatum" />
                         </div>
-                        <div *ngIf="stepperService.formData.formMarketingConsent">
+                        <div *ngIf="stepperService.loyaltyProgram.formMarketingConsent">
                             <label class="inline-flex items-center">
                                 <app-checkbox className="w-5 h-5" [checked]="true" />
                                 <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Ich stimme zu, Marketingmitteilungen für dieses Treueprogramm zu erhalten.</span>
@@ -146,7 +146,7 @@
                         </div>
                         <div>
                             <app-button size="sm" variant="outline">
-                               {{ stepperService.formData.formSendButton }}
+                               {{ stepperService.loyaltyProgram.formSendButton }}
                             </app-button>
                         </div>
                     </form>

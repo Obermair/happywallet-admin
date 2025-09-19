@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { DataService } from '../../data.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,7 @@ export class StepperService {
       name: 'Stempelkarte gestalten', 
       description: 'Erstelle das Layout deiner Karte.', 
       link: '/loyalty-programs/create/card',
-      status: 'current' 
+      status: 'upcoming' 
     },
     { 
       id: 2, 
@@ -33,7 +35,31 @@ export class StepperService {
     }
   ];
 
-  public cardData = {
+  public loyaltyProgram = { 
+    loyaltyProgramCode: '',
+    programName: '',
+    programDescription: '',
+    backgroundColor: '',
+    textColor: '',
+    stampColor: '',
+    maxPoints: 0,
+    startPoints: 0,
+    formDescription: '',
+    formSendButton: '',
+    formNameField: true,
+    formNameFieldMandatory: true,
+    formBirthdayField: false,
+    formBirthdayFieldMandatory: false,
+    formMarketingConsent: true,
+    flyerHeading: '',
+    flyerScanInfo: '',
+    programType: '',
+    user: '',
+    active: true
+  };
+
+  public defaultLoyaltyProgram = {
+    loyaltyProgramCode: '',
     programName: 'Free Burger Club',
     programDescription: 'Erhalte einen Gratis Burger nach dem 7 Besuch bei uns.',
     backgroundColor: '#f2f4f7',
@@ -41,10 +67,6 @@ export class StepperService {
     stampColor: '#c38e71',
     maxPoints: 8,
     startPoints: 1,
-    signupLink: 'https://signup.happywallet.at/?loyaltyProgram=',
-  };
-
-  public formData = {
     formDescription: 'Bitte füllen Sie dieses Formular aus, um unserem Treueprogramm beizutreten.',
     formSendButton: 'Jetzt beitreten!',
     formNameField: true,
@@ -52,29 +74,58 @@ export class StepperService {
     formBirthdayField: false,
     formBirthdayFieldMandatory: false,
     formMarketingConsent: true,
-  }
-
-  flyerData = {
     flyerHeading: 'Erhalte einen Gratis Burger nach dem 7 Besuch bei uns.',
-    flyerScanInfo: 'Scannen Sie den QR-Code, und fügen Sie Ihre Stempelkarte Ihrer Apple oder Google Wallet hinzu.',
+    flyerScanInfo: 'Einfach QR-Code scannen und Stempelkarte zu Apple oder Google Wallet hinzufügen.',
+    programType: 'stamps',
+    user: '',
+    active: true
   }
 
-  constructor() { }
+  constructor(private router: Router) {
+  }
 
   public getSteps() {
     return this.steps;
   }
-  
-  // Set the current step by id and update statuses
-  public setStep(stepId: number) {
+
+  setStepToActive(stepId: number) {
     this.steps = this.steps.map(step => {
-      if (step.id < stepId) {
-        return { ...step, status: 'complete' };
-      } else if (step.id === stepId) {
+      if (step.id === stepId) {
         return { ...step, status: 'current' };
       } else {
-        return { ...step, status: 'upcoming' };
+        return step;
       }
     });
   }
+
+  setStepToComplete(stepId: number) {
+    this.steps = this.steps.map(step => {
+      if (step.id === stepId) {
+        return { ...step, status: 'complete' };
+      } else {
+        return step;
+      }
+    });
+  }
+
+  setStepsToUpcoming() {
+    this.steps = this.steps.map(step => {
+      return { ...step, status: 'upcoming' };
+    });
+
+    this.setStepToActive(1);
+  }
+
+  setStepsToComplete() {
+    this.steps = this.steps.map(step => {
+      return { ...step, status: 'complete' };
+    });
+    
+    this.setStepToActive(1);
+  }
+
+  generateRandomCode(length: number = 15): string {
+    return Math.random().toString(36).substring(2, 2 + length);
+  }
+
 }

@@ -26,19 +26,54 @@ export class FlyerComponent {
   constructor(private router: Router, public stepperService: StepperService, public dataService: DataService) { }
 
   async ngOnInit() {
+    this.stepperService.setStepToActive(3);
+
     await this.dataService.getCurrentUserPromise();
-    
     await this.updatePdf();
   }
 
 
   linkToFlyer() {
-    this.stepperService.setStep(2);
+    this.stepperService.setStepToComplete(3);
     this.router.navigate(['/loyalty-programs/create/form']);
   }
 
   createLoyaltyCard() {
-    // Logic to create the loyalty card
+    this.stepperService.setStepToComplete(3);
+    this.generateLoyaltyCard();
+  }
+
+  public generateLoyaltyCard(){
+    // check if all steps are complete
+    const allComplete = this.stepperService.steps.every(step => step.status === 'complete' || step.status === 'current');
+
+    if (allComplete) {
+      if (this.stepperService.loyaltyProgram.loyaltyProgramCode && this.dataService.loyaltyPrograms?.some((p: any) => p.attributes.loyaltyProgramCode === this.stepperService.loyaltyProgram.loyaltyProgramCode)) {
+        this.dataService.updateLoyaltyProgramWithoutId(this.stepperService.loyaltyProgram).then(() => {
+          this.stepperService.loyaltyProgram.loyaltyProgramCode = '';
+          this.stepperService.setStepsToUpcoming();
+          this.router.navigate(['/loyalty-programs']);
+        });
+      } else {
+        this.dataService.createLoyaltyProgram(this.stepperService.loyaltyProgram).then(() => {
+          this.stepperService.loyaltyProgram.loyaltyProgramCode = '';
+          this.stepperService.setStepsToUpcoming();
+          this.router.navigate(['/loyalty-programs']);
+        });
+      } 
+    } else {
+      // If not all steps are complete, navigate to the first incomplete step
+      const firstIncompleteStep = this.stepperService.steps.find(step => step.status === 'current');
+      if (firstIncompleteStep) {
+        this.router.navigate([firstIncompleteStep.link]);
+      }
+    }
+  }
+
+    // A method that checks that every field is filled
+  public isFormValid(): boolean {
+    return this.stepperService.loyaltyProgram.flyerHeading.trim() !== '' &&
+           this.stepperService.loyaltyProgram.flyerScanInfo.trim() !== '';
   }
 
 
@@ -98,8 +133,8 @@ private async loadFont(pdfDoc: PDFDocument, fontUrl: string) {
 }
 
 private addTexts(page: PDFPage, font: PDFFont, pageWidth: number) {
-  const heading = this.stepperService.flyerData.flyerHeading;
-  const scanInfo = this.stepperService.flyerData.flyerScanInfo;
+  const heading = this.stepperService.loyaltyProgram.flyerHeading;
+  const scanInfo = this.stepperService.loyaltyProgram.flyerScanInfo;
 
   // max. Textbreite für Überschrift und ScanInfo
   const maxHeadingWidth = 400;
@@ -186,7 +221,7 @@ private async addLogo(pdfDoc: PDFDocument, page: PDFPage) {
 
 
 private async addQrCode(pdfDoc: PDFDocument, page: PDFPage) {
-  const signupLink = this.stepperService.cardData.signupLink;
+  const signupLink = this.dataService.signUpPageLink + this.stepperService.loyaltyProgram.loyaltyProgramCode;
 
   // 1. QR Code als DataURL erzeugen
   const qrDataUrl = await QRCode.toDataURL(signupLink, { margin: 1, width: 200 });

@@ -2,7 +2,7 @@
     <app-button (click)="linkToFlyer()" [disabled]="false" size="sm" [startIcon]="stepperService.previousIcon" variant="outline">
         Vorheriger Schritt
     </app-button>
-    <app-button (click)="createLoyaltyCard()" [disabled]="false" size="sm" [endIcon]="stepperService.nextIcon" variant="outline">
+    <app-button (click)="createLoyaltyCard()" [disabled]="!isFormValid()" size="sm" [endIcon]="stepperService.nextIcon" variant="outline">
         Stempelkarte erstellen
     </app-button>
 </div>
@@ -11,11 +11,11 @@
         <app-component-card title="Flyer bearbeiten" desc="Passen Sie den Flyer an, den Kunden herunterladen können, um Ihre digitale Treuekarte zu erhalten.">
             <div>
                 <app-label>Überschrift</app-label>
-                <app-input-field [value]="stepperService.flyerData.flyerHeading" (valueChange)="stepperService.flyerData.flyerHeading = $event; updatePdf()"  type="text" placeholder="Treten Sie unserem Treueprogramm bei!" />
+                <app-input-field [value]="stepperService.loyaltyProgram.flyerHeading" (valueChange)="stepperService.loyaltyProgram.flyerHeading = $event; updatePdf()"  type="text" placeholder="Treten Sie unserem Treueprogramm bei!" />
             </div>
             <div>
                 <app-label>Scan Anweisung</app-label>
-                <app-input-field  [value]="stepperService.flyerData.flyerScanInfo" (valueChange)="stepperService.flyerData.flyerScanInfo = $event; updatePdf()" type="text" placeholder="Scannen Sie den QR-Code, und fügen Sie Ihre Stempelkarte Ihrer Apple oder Google Wallet hinzu." />
+                <app-input-field  [value]="stepperService.loyaltyProgram.flyerScanInfo" (valueChange)="stepperService.loyaltyProgram.flyerScanInfo = $event; updatePdf()" type="text" placeholder="Scannen Sie den QR-Code, und fügen Sie Ihre Stempelkarte Ihrer Apple oder Google Wallet hinzu." />
             </div>
         </app-component-card>
     </div>

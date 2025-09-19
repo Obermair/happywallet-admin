@@ -26,35 +26,51 @@ export class CardComponent {
   constructor(public dataService: DataService, private router: Router, public stepperService: StepperService) {
   }
 
+  ngOnInit() {
+    this.stepperService.setStepToActive(1);
+  }
+
   public linkToForm() {
-    this.stepperService.setStep(2);
+    this.stepperService.setStepToComplete(1);
+    this.stepperService.setStepToActive(2);
     this.router.navigate(['/loyalty-programs/create/form']);
   }
 
   public increaseMaxPoints() {
-    if (this.stepperService.cardData.maxPoints < 12) {
-      this.stepperService.cardData.maxPoints++;
+    if (this.stepperService.loyaltyProgram.maxPoints < 12) {
+      this.stepperService.loyaltyProgram.maxPoints++;
     }
   }
 
   public decreaseMaxPoints() {
-    if (this.stepperService.cardData.maxPoints > 1) {
-      this.stepperService.cardData.maxPoints--;
-      if (this.stepperService.cardData.startPoints > this.stepperService.cardData.maxPoints) {
-        this.stepperService.cardData.startPoints = this.stepperService.cardData.maxPoints;
+    if (this.stepperService.loyaltyProgram.maxPoints > 1) {
+      this.stepperService.loyaltyProgram.maxPoints--;
+      if (this.stepperService.loyaltyProgram.startPoints > this.stepperService.loyaltyProgram.maxPoints) {
+        this.stepperService.loyaltyProgram.startPoints = this.stepperService.loyaltyProgram.maxPoints;
       }
     }
   }
 
   public increaseStartPoints() {
-    if (this.stepperService.cardData.startPoints < this.stepperService.cardData.maxPoints) {
-      this.stepperService.cardData.startPoints++;
+    if (this.stepperService.loyaltyProgram.startPoints < this.stepperService.loyaltyProgram.maxPoints) {
+      this.stepperService.loyaltyProgram.startPoints++;
     }
   }
   
   public decreaseStartPoints() {
-    if (this.stepperService.cardData.startPoints > 0) {
-      this.stepperService.cardData.startPoints--;
+    if (this.stepperService.loyaltyProgram.startPoints > 0) {
+      this.stepperService.loyaltyProgram.startPoints--;
     }
+  }
+
+  // A method that checks that every field is filled
+  public isFormValid(): boolean {
+    return this.stepperService.loyaltyProgram.programName.trim() !== '' &&
+           this.stepperService.loyaltyProgram.programDescription.trim() !== '' &&
+           this.stepperService.loyaltyProgram.backgroundColor.trim() !== '' &&
+           this.stepperService.loyaltyProgram.textColor.trim() !== '' &&
+           this.stepperService.loyaltyProgram.stampColor.trim() !== '' &&
+           this.stepperService.loyaltyProgram.maxPoints > 0 &&
+           this.stepperService.loyaltyProgram.startPoints >= 0;
   }
 }

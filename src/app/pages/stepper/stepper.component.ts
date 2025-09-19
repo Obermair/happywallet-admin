@@ -17,4 +17,14 @@ export class StepperComponent {
   public pageTitle = 'Stempelkarte erstellen';
 
   constructor(public stepperService: StepperService) { }
+
+  ngOnInit() {
+    if (this.stepperService.loyaltyProgram.loyaltyProgramCode === '') {
+      this.stepperService.loyaltyProgram.loyaltyProgramCode = this.stepperService.generateRandomCode();
+      this.stepperService.setStepsToUpcoming();
+    }
+    else {
+      this.stepperService.setStepsToComplete();
+    }
+  }
 }

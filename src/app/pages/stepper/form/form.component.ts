@@ -22,13 +22,25 @@ export class FormComponent {
 
   constructor(private router: Router, public stepperService: StepperService, public dataService: DataService){}
 
+  ngOnInit() {
+    this.stepperService.setStepToActive(2);
+  }
+
   linkToCard() {
+    this.stepperService.setStepToComplete(2);
     this.router.navigate(['/loyalty-programs/create/card']);
   }
 
   linkToFlyer() {
-    this.stepperService.setStep(3);
+    this.stepperService.setStepToComplete(2);
+    this.stepperService.setStepToActive(3);
     this.router.navigate(['/loyalty-programs/create/flyer']);
+  }
+
+  // A method that checks that every field is filled
+  public isFormValid(): boolean {
+    return this.stepperService.loyaltyProgram.formDescription.trim() !== '' &&
+           this.stepperService.loyaltyProgram.formSendButton.trim() !== '';
   }
 
 }

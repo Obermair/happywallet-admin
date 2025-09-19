@@ -17,6 +17,7 @@ export class StepperNavComponent {
   stepClicked(step: { id: number, name: string, description: string, link:string, status: string }) {
     if (step.status === 'complete' || step.status === 'current') {
       // Navigate to the step's link
+      this.stepperService.setStepToActive(step.id);
       this.router.navigate([step.link]);
     }
   }
