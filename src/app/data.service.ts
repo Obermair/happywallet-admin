@@ -136,53 +136,68 @@ export class DataService  {
     });
   }
 
-public getCustomersByLoyaltyPrograms(loyaltyProgramIds: string[]) {
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (!loyaltyProgramIds?.length) {
-        resolve([]);
-        return;
+  public getCustomersByLoyaltyPrograms(loyaltyProgramIds: string[]) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (!loyaltyProgramIds?.length) {
+          resolve([]);
+          return;
+        }
+
+        // 1️⃣ Alle Program-User holen, die zu den ausgewählten Loyalty-Programmen gehören
+        const programUsersFilter = loyaltyProgramIds.map(id => `filters[loyalty_program][id][$eq]=${id}`).join('&');
+
+        const programUsersResponse: any = await this.http
+          .get(`${this.apiUrl}/api/program-users?${programUsersFilter}&populate=*`)
+          .toPromise();
+
+        const programUsers = programUsersResponse.data;
+
+        // 2️⃣ Eindeutige Customer-IDs extrahieren
+        const customerIds = Array.from(
+          new Set(
+            programUsers
+              .map((pu: any) => pu.attributes.customer?.data?.id)
+              .filter((id: any) => id != null)
+          )
+        );
+
+        if (!customerIds.length) {
+          resolve([]);
+          return;
+        }
+
+        // 3️⃣ Alle Customer-Daten holen
+        const customerFilter = customerIds.map(id => `filters[id][$eq]=${id}`).join('&');
+
+        const customersResponse: any = await this.http
+          .get(`${this.apiUrl}/api/customers?${customerFilter}&populate=*`)
+          .toPromise();
+
+        resolve(customersResponse.data);
+      } catch (err) {
+        console.error('Error fetching customers:', err);
+        reject(err);
       }
+    });
+  }
 
-      // 1️⃣ Alle Program-User holen, die zu den ausgewählten Loyalty-Programmen gehören
-      const programUsersFilter = loyaltyProgramIds.map(id => `filters[loyalty_program][id][$eq]=${id}`).join('&');
+  public getLoyaltyProgramsForCustomer(programUserIds: string[]) {
+    return new Promise(async (resolve, reject) => {
+      try {
 
-      const programUsersResponse: any = await this.http
-        .get(`${this.apiUrl}/api/program-users?${programUsersFilter}&populate=*`)
-        .toPromise();
+        const loyaltyProgramsFilter = programUserIds.map(id => `filters[program_users][id][$eq]=${id}`).join('&');
 
-      const programUsers = programUsersResponse.data;
+        const loyaltyProgramsResponse: any = await this.http
+          .get(`${this.apiUrl}/api/loyalty-programs?${loyaltyProgramsFilter}`)
+          .toPromise();
 
-      // 2️⃣ Eindeutige Customer-IDs extrahieren
-      const customerIds = Array.from(
-        new Set(
-          programUsers
-            .map((pu: any) => pu.attributes.customer?.data?.id)
-            .filter((id: any) => id != null)
-        )
-      );
-
-      if (!customerIds.length) {
-        resolve([]);
-        return;
+        resolve(loyaltyProgramsResponse.data);
+      } catch (err) {
+        console.error('Error fetching loyalty programs:', err);
+        reject(err);
       }
-
-      // 3️⃣ Alle Customer-Daten holen
-      const customerFilter = customerIds.map(id => `filters[id][$eq]=${id}`).join('&');
-
-      console.log(`${this.apiUrl}/api/customers?${customerFilter}&populate=*`); // Debug-Ausgabe
-
-      const customersResponse: any = await this.http
-        .get(`${this.apiUrl}/api/customers?${customerFilter}&populate=*`)
-        .toPromise();
-
-      resolve(customersResponse.data);
-    } catch (err) {
-      console.error('Error fetching customers:', err);
-      reject(err);
-    }
-  });
-}
-
+    });
+  }
 
 }

@@ -87,6 +87,18 @@
                 {{ customer.attributes.updatedAt ? (customer.attributes.updatedAt | date:'dd.MM.yyyy') : '-' }}
                 </p>
             </td>
+            <td class="px-4 sm:px-6 py-3.5">
+                <div class="flex flex-wrap gap-2">
+                    <app-badge
+                    variant="light"
+                    color="primary"
+                    size="sm"
+                    *ngFor="let program of customer.loyaltyPrograms"
+                    >
+                    {{ program?.attributes?.programName ? program.attributes.programName : '-' }}
+                    </app-badge>
+                </div>
+            </td>
             </tr>
             }
         </tbody>

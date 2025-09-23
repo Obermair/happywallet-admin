@@ -43,6 +43,7 @@ export class CustomersComponent {
 
   multiOptions: MultiOption[] = [];
 
+
   constructor(public dataService: DataService) {}
 
   ngOnInit() {
@@ -57,9 +58,7 @@ export class CustomersComponent {
       // initially select all options
       this.handleSelectAllPrograms();
       
-      this.dataService.getCustomersByLoyaltyPrograms(this.selectedValues).then((customers: any) => {
-        this.customers = customers;
-      });
+      this.reloadCustomers
     });
 
   }
@@ -67,20 +66,27 @@ export class CustomersComponent {
   handleSelectAll(){
   }
 
-  handleSelectAllPrograms() {
-    this.selectedValues = this.multiOptions.map(option => option.value);
+  reloadCustomers(){
     this.dataService.getCustomersByLoyaltyPrograms(this.selectedValues).then((customers: any) => {
       this.customers = customers;
+
+      // Fetch loyalty programs for each customer
+      this.customers.forEach(customer => {
+        this.getLoyaltyProgramsForCustomer(customer);
+      });
     });
+  }
+
+  handleSelectAllPrograms() {
+    this.selectedValues = this.multiOptions.map(option => option.value);
+    this.reloadCustomers();
   }
   
   handleMultiSelectChange(values: string[]) {
     this.selectedValues = values;
-    this.dataService.getCustomersByLoyaltyPrograms(this.selectedValues).then((customers: any) => {
-      this.customers = customers;
-    });
+    this.reloadCustomers();
   }
-
+  
   handleRowSelect(id: string) {
     if (this.selectedRows.includes(id)) {
       this.selectedRows = this.selectedRows.filter(rowId => rowId !== id);
@@ -95,7 +101,13 @@ export class CustomersComponent {
     return 'error';
   }
 
-  printBirthday(date: any) {
-    console.log(date);
+
+  getLoyaltyProgramsForCustomer(customer: any) {
+    // get program ids from customer in [1, 2, 3] format
+    const programUserIds = customer.attributes.program_users.data.map((pu: any) => pu.id);
+
+    this.dataService.getLoyaltyProgramsForCustomer(programUserIds).then((programs: any) => {
+      customer.loyaltyPrograms = programs;
+    });
   }
 }
