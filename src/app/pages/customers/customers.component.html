@@ -1,0 +1,97 @@
+<div>
+  <app-page-breadcrumb pageTitle="Meine Kunden" />
+  <div class="min-h-screen rounded-2xl border border-gray-200 bg-white px-5 py-7 dark:border-gray-800 dark:bg-white/[0.03] xl:px-10 xl:py-12">
+    <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white pt-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+    <div class="flex flex-col gap-4 px-6 mb-4 flex-row items-center justify-between">
+        <div>
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+                Aktuelle Kunden ({{ customers.length }})
+            </h3>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="sm:w-72 md:w-[400px] lg:w-[500px] xl:w-[600px]">
+                <app-multi-select
+                [options]="multiOptions"
+                [(ngModel)]="selectedValues"
+                (ngModelChange)="handleMultiSelectChange($event)">
+                </app-multi-select>
+            </div>
+            <button (click)="handleSelectAllPrograms()" class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+                Alle anzeigen
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-full overflow-x-auto">
+        <table class="min-w-full">
+        <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+            <tr>
+            <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <app-checkbox [checked]="selectAll" (checkedChange)="handleSelectAll()"/>
+                    </div>
+                </div>
+            </th>
+            <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Name</th>
+            <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Email</th>
+            <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Geburtstag</th>
+            <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Beigetreten am</th>
+            <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Letzte Interaktion</th>
+            <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Stempelkarten</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (customer of customers; track $index) {
+            <tr>
+            <td class="px-4 sm:px-6 py-3.5">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <app-checkbox
+                        [checked]="selectedRows.includes(customer.id)"
+                        (checkedChange)="handleRowSelect(customer.id)"
+                        />
+                    </div>
+                </div>
+            </td>
+            <td class="px-4 sm:px-6 py-3.5">
+                <div class="flex items-center gap-3">
+                <app-avatar-text 
+                    [name]="customer.attributes.name ? customer.attributes.name : 'N/A'" 
+                    class="w-10 h-10"/>
+                <div>
+                    <span class="mb-0.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
+                    <!-- {{ customer.attributes.name }} show - if empty -->
+                    {{ customer.attributes.name ? customer.attributes.name : '-' }}
+                    </span>
+                </div>
+                </div>
+            </td>
+            <td class="px-4 sm:px-6 py-3.5">
+                <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+                {{ customer.attributes.email }}
+                </p>
+            </td>
+            <td class="px-4 sm:px-6 py-3.5">
+                <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+                <!-- check if not null -->
+                {{ customer.attributes.birthday ? (customer.attributes.birthday | date:'dd.MM.yyyy') : '-' }}
+            </p>
+            </td>
+            <td class="px-4 sm:px-6 py-3.5">
+                <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+                {{ customer.attributes.createdAt ? (customer.attributes.createdAt | date:'dd.MM.yyyy') : '-' }}
+            </td>
+            <td class="px-4 sm:px-6 py-3.5">
+                <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+                {{ customer.attributes.updatedAt ? (customer.attributes.updatedAt | date:'dd.MM.yyyy') : '-' }}
+                </p>
+            </td>
+            </tr>
+            }
+        </tbody>
+        </table>
+    </div>
+    </div>
+  </div>
+</div>

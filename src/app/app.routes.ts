@@ -24,6 +24,7 @@ import { StepperComponent } from './pages/stepper/stepper.component';
 import { CardComponent } from './pages/stepper/card/card.component';
 import { FormComponent } from './pages/stepper/form/form.component';
 import { FlyerComponent } from './pages/stepper/flyer/flyer.component';
+import { CustomersComponent } from './pages/customers/customers.component';
 
 export const routes: Routes = [
   {
@@ -64,6 +65,11 @@ export const routes: Routes = [
               title: 'happywallet - your digital loyalty card'
             }
           ]      
+      },
+      {
+        path:'customers',
+        component: CustomersComponent,
+        title:'happywallet - your digital loyalty card'
       },
       {
         path:'calendar',

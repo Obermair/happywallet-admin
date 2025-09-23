@@ -1,4 +1,7 @@
-<div class="flex justify-end w-full mb-6">
+<div class="flex justify-between w-full mb-6">
+    <app-button (click)="backToLoyaltyPrograms()" [disabled]="false" size="sm" [startIcon]="stepperService.previousIcon" variant="outline">
+        Zurück
+    </app-button>   
     <app-button (click)="linkToForm()" [disabled]="!isFormValid()" size="sm" [endIcon]="stepperService.nextIcon" variant="outline">
         Nächster Schritt
     </app-button>

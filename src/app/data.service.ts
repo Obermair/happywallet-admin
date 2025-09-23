@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class DataService  {
-
   public apiUrl = 'https://api.happywallet.at'; 
   public signUpPageLink = 'https://signup.happywallet.at/?loyaltyProgram=';
   public currentUser: any = null;
@@ -88,9 +87,11 @@ export class DataService  {
     });
   }
 
-  public getLoyaltyProgams() {
+  public getLoyaltyPrograms() {
+    const userParams = '?filters[user][id][$eq]=' + localStorage.getItem('jwt_user_id') + '&populate=*';
+
     return new Promise((resolve, reject) => {
-      this.http.get(this.apiUrl + '/api/loyalty-programs/').subscribe(
+      this.http.get(this.apiUrl + '/api/loyalty-programs' + userParams).subscribe(
         (response: any) => {
           this.loyaltyPrograms = response.data;
           resolve(response.data);
@@ -134,4 +135,54 @@ export class DataService  {
         );
     });
   }
+
+public getCustomersByLoyaltyPrograms(loyaltyProgramIds: string[]) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!loyaltyProgramIds?.length) {
+        resolve([]);
+        return;
+      }
+
+      // 1️⃣ Alle Program-User holen, die zu den ausgewählten Loyalty-Programmen gehören
+      const programUsersFilter = loyaltyProgramIds.map(id => `filters[loyalty_program][id][$eq]=${id}`).join('&');
+
+      const programUsersResponse: any = await this.http
+        .get(`${this.apiUrl}/api/program-users?${programUsersFilter}&populate=*`)
+        .toPromise();
+
+      const programUsers = programUsersResponse.data;
+
+      // 2️⃣ Eindeutige Customer-IDs extrahieren
+      const customerIds = Array.from(
+        new Set(
+          programUsers
+            .map((pu: any) => pu.attributes.customer?.data?.id)
+            .filter((id: any) => id != null)
+        )
+      );
+
+      if (!customerIds.length) {
+        resolve([]);
+        return;
+      }
+
+      // 3️⃣ Alle Customer-Daten holen
+      const customerFilter = customerIds.map(id => `filters[id][$eq]=${id}`).join('&');
+
+      console.log(`${this.apiUrl}/api/customers?${customerFilter}&populate=*`); // Debug-Ausgabe
+
+      const customersResponse: any = await this.http
+        .get(`${this.apiUrl}/api/customers?${customerFilter}&populate=*`)
+        .toPromise();
+
+      resolve(customersResponse.data);
+    } catch (err) {
+      console.error('Error fetching customers:', err);
+      reject(err);
+    }
+  });
+}
+
+
 }

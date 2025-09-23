@@ -13,7 +13,7 @@ import { StepperService } from '../../stepper/stepper.service';
 
 @Component({
   selector: 'app-loyalty-programs',
-  imports: [PageBreadcrumbComponent, ComponentCardComponent, ButtonComponent, CommonModule, SafeHtmlPipe, InputFieldComponent, QrCodeComponent, SwitchComponent],
+  imports: [PageBreadcrumbComponent, ButtonComponent, CommonModule, SafeHtmlPipe, InputFieldComponent, QrCodeComponent, SwitchComponent],
   templateUrl: './loyalty-programs.component.html',
   styleUrl: './loyalty-programs.component.css'
 })
@@ -35,7 +35,7 @@ export class LoyaltyProgramsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataService.getLoyaltyProgams();
+    this.dataService.getLoyaltyPrograms();
   }
 
   copyToClipboard(text: string) {
@@ -56,5 +56,14 @@ export class LoyaltyProgramsComponent implements OnInit {
     this.stepperService.loyaltyProgram = this.stepperService.defaultLoyaltyProgram;
     this.stepperService.loyaltyProgram.user = this.dataService.currentUser.id;
     this.router.navigate(['/loyalty-programs/create/card']);
+  }
+
+  handlePdfDownload(card: any) {
+    this.dataService.getCurrentUserPromise().then(() => {
+      this.stepperService.loyaltyProgram = card.attributes;
+      this.stepperService.updatePdf(this.dataService.apiUrl + this.dataService.currentUser.shopLogo.url, this.dataService.signUpPageLink + this.stepperService.loyaltyProgram.loyaltyProgramCode).then(() => {
+        this.stepperService.downloadPdf();
+      });
+    });
   }
 }

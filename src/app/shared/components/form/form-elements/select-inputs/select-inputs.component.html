@@ -11,12 +11,6 @@
       ></app-select>
     </div>
     <div>
-      <app-multi-select
-        label="Multiple Select Options"
-        [options]="multiOptions"
-        [defaultSelected]="selectedValues"
-        (selectionChange)="handleMultiSelectChange($event)"
-      ></app-multi-select>
       <p class="sr-only">
         Selected Values: {{ selectedValues.join(', ') }}
       </p>

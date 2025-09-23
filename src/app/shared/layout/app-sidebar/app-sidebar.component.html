@@ -125,7 +125,7 @@
                   (isMobileOpen$ | async)) {
                   <svg
                     [ngClass]="{
-                      'rotate-180 text-brand-500': openSubmenu === 'main-' + i
+                      'rotate-180': openSubmenu === 'main-' + i
                     }"
                     width="1em"
                     height="1em"
@@ -215,6 +215,7 @@
                 <a
                   [routerLink]="nav.path"
                   routerLinkActive="menu-item-active"
+                  [routerLinkActiveOptions]="{ exact: true }"
                   class="menu-item group"
                   [ngClass]="{ 'menu-item-inactive': !isActive(nav.path) }"
                 >
@@ -331,7 +332,7 @@
                   (isMobileOpen$ | async)) {
                   <svg
                     [ngClass]="{
-                      'rotate-180 text-brand-500': openSubmenu === 'others-' + i
+                      'rotate-180': openSubmenu === 'others-' + i
                     }"
                     width="1em"
                     height="1em"

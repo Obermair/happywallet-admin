@@ -20,7 +20,6 @@ interface MultiOption {
   selector: 'app-select-inputs',
   imports: [
     CommonModule,
-    MultiSelectComponent,
     ComponentCardComponent,
     SelectComponent,
     LabelComponent,

@@ -30,6 +30,13 @@ export class CardComponent {
     this.stepperService.setStepToActive(1);
   }
 
+  public backToLoyaltyPrograms() {
+    this.stepperService.loyaltyProgram.loyaltyProgramCode = '';
+    this.stepperService.setStepsToUpcoming();
+    this.router.navigate(['/loyalty-programs']);
+  }
+
+
   public linkToForm() {
     this.stepperService.setStepToComplete(1);
     this.stepperService.setStepToActive(2);

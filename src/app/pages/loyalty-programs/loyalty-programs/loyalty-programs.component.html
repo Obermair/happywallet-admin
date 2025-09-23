@@ -7,12 +7,21 @@
       </app-button>
     </div>
     <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-1 lg:grid-cols-2">
-      <app-component-card 
-        *ngFor="let card of dataService.loyaltyPrograms"
-        [title]="card.attributes.programName">
-        <div class="flex items-center flex-col">
-            <div class="w-full flex flex-row justify-between">
-                <div class="flex flex-col">
+
+        <div *ngFor="let card of dataService.loyaltyPrograms" class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+            <!-- Card Header -->
+            <div class="px-6 py-5">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
+                        {{ card.attributes.programName }}
+                        </h3>
+                        @if (card.attributes.programDescription) {
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        {{ card.attributes.programDescription }}
+                        </p>
+                        }
+                    </div>
                     <div class="pt-3 ml-5">
                         <app-switch
                         label="Aktiv"
@@ -20,58 +29,70 @@
                         (valueChange)="switchActiveness($event, card)"
                         ></app-switch>
                     </div>
-                    <div class="rounded-2xl w-full flex flex-row items-center bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:mr-4">
-                        <div class="flex items-center justify-center w-18 h-18 bg-gray-100 rounded-xl dark:bg-gray-800" [innerHTML]="groupIcon | safeHtml">
-                        </div>
-                        <div class="flex items-end justify-between ml-4">
-                            <div>
-                            <span class="text-sm text-gray-500 dark:text-gray-400">Aktive Kunden</span>
-                            <h4 class="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">{{ card?.attributes?.customers?.count ?? 0 }}</h4>
+                </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-2 border-t border-gray-100 dark:border-gray-800 sm:p-6">
+                <div class="space-y-6">
+                        <div class="flex items-center flex-col">
+                <div class="w-full flex flex-row justify-between items-center">
+                    <div class="flex flex-col">
+                        <div class="rounded-2xl w-full flex flex-row items-center bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:mr-4">
+                            <div class="flex items-center justify-center w-18 h-18 bg-gray-100 rounded-xl dark:bg-gray-800" [innerHTML]="groupIcon | safeHtml">
+                            </div>
+                            <div class="flex items-end justify-between ml-4">
+                                <div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">Aktive Kunden</span>
+                                <h4 class="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">{{ card?.attributes?.program_users?.data.length ?? 0 }}</h4>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div>
+                        <qr-code [value]="signupLink"
+                        class="rounded-2xl"
+                        size="150" 
+                        errorCorrectionLevel="M" />
+                    </div>
                 </div>
-                <div >
-                    <qr-code [value]="signupLink"
-                    class="rounded-2xl"
-                    size="150" 
-                    errorCorrectionLevel="M" />
+                <div class="w-full p-2 relative">
+                    <app-input-field
+                        [value]="dataService.signUpPageLink + card?.attributes?.loyaltyProgramCode"
+                        class="form-input"
+                        [readonly]="true"
+                    />
+                    <span
+                    class="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
+                    (click)="copyToClipboard(dataService.signUpPageLink + card?.attributes?.loyaltyProgramCode)"
+                    [innerHTML]="copyIcon | safeHtml"
+                    ></span>
                 </div>
-            </div>
-            <div class="w-full p-2 relative">
-                <app-input-field
-                    [value]="dataService.signUpPageLink + card?.attributes?.loyaltyProgramCode"
-                    class="form-input"
-                    [readonly]="true"
-                />
-                <span
-                class="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                (click)="copyToClipboard(dataService.signUpPageLink + card?.attributes?.loyaltyProgramCode)"
-                [innerHTML]="copyIcon | safeHtml"
-                ></span>
-            </div>
-            <div class="flex gap-2 w-full dark:bg-white/[0.03] p-2 rounded-lg">
-                <app-button
-                    class="w-full"
-                    size="md"
-                    variant="outline"
-                    [startIcon]="editIcon"
-                    (click)="updateLoyaltyProgram(card)"
-                >
-                     <div class="w-full flex justify-center">Bearbeiten</div>
-                </app-button>
+                <div class="flex gap-2 w-full dark:bg-white/[0.03] p-2 rounded-lg">
+                    <app-button
+                        class="w-full"
+                        size="md"
+                        variant="outline"
+                        [startIcon]="editIcon"
+                        (click)="updateLoyaltyProgram(card)"
+                    >
+                        <div class="w-full flex justify-center">Bearbeiten</div>
+                    </app-button>
 
-                <app-button
-                    class="w-full"  
-                    size="md"
-                    variant="outline"
-                    [startIcon]="downloadIcon"
-                >
-                    <div class="w-full flex justify-center">Flyer herunterladen</div>
-                </app-button>
+                    <app-button
+                        class="w-full"  
+                        size="md"
+                        variant="outline"
+                        [startIcon]="downloadIcon"
+                        (click)="handlePdfDownload(card)"
+                    >
+                        <div class="w-full flex justify-center">Flyer herunterladen</div>
+                    </app-button>
+                </div>
+                        </div>
+                </div>
             </div>
         </div>
-      </app-component-card>
     </div>
   </div>
 </div>
