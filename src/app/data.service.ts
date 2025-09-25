@@ -200,4 +200,117 @@ export class DataService  {
     });
   }
 
+  public getCustomersByLoyaltyProgramsOnDate(loyaltyProgramIds: string[], selectedLastInteraction: string) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        if (!loyaltyProgramIds?.length) {
+          resolve([]);
+          return;
+        }
+
+        // 1️⃣ Alle Program-User holen, die zu den ausgewählten Loyalty-Programmen gehören
+        const programUsersFilter = loyaltyProgramIds.map(id => `filters[loyalty_program][id][$eq]=${id}`).join('&');
+
+        const programUsersResponse: any = await this.http
+          .get(`${this.apiUrl}/api/program-users?${programUsersFilter}&populate=*`)
+          .toPromise();
+
+        const programUsers = programUsersResponse.data;
+
+        // 2️⃣ Eindeutige Customer-IDs extrahieren
+        const customerIds = Array.from(
+          new Set(
+            programUsers
+              .map((pu: any) => pu.attributes.customer?.data?.id)
+              .filter((id: any) => id != null)
+          )
+        );
+
+        if (!customerIds.length) {
+          resolve([]);
+          return;
+        }
+
+        // 3️⃣ Alle Customer-Daten holen
+        const customerFilter = customerIds.map(id => `filters[id][$eq]=${id}`).join('&');
+
+        let dateFilter = '';
+        /**
+         *   lastInteractionOptions: Option[] = [
+             { value: 'all', label: 'Alle' },
+             { value: 'today', label: 'Heute' },
+             { value: 'yesterday', label: 'Gestern' },
+             { value: '7days', label: 'Letzte 7 Tage' },
+             { value: '30days', label: 'Letzte 30 Tage' },
+             { value: '90days', label: 'Letzte 90 Tage' },
+             { value: '180days', label: 'Letzte 180 Tage' },
+             { value: '365days', label: 'Letztes Jahr' },
+             { value: 'more365days', label: 'Länger als ein Jahr' },
+           ];
+         */
+        const today = new Date();
+        let startDate: Date | null = null;
+        let endDate: Date | null = null;
+        
+        switch (selectedLastInteraction) {  
+          case 'today':
+            startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            break;
+          case 'yesterday':
+            startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+            endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            break;
+          case '7days':
+            startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+            endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            break;
+          case '30days':
+            startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 30);
+            endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            break;
+          case '90days':
+            startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 90);
+            endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            break;    
+          case '180days':
+            startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 180);
+            endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            break;
+          case '365days':
+            startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 365);
+            endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            break;
+          case 'more365days':
+            endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 365);
+            break;
+          case 'all':
+          default:
+            startDate = null;
+            endDate = null;
+            break;
+        }
+
+        if (startDate && endDate) {
+          const startStr = startDate.toISOString();
+          const endStr = endDate.toISOString();
+          dateFilter = `&filters[lastInteraction][$gte]=${startStr}&filters[lastInteraction][$lt]=${endStr}`;
+        } else if (endDate) {
+          const endStr = endDate.toISOString();
+          dateFilter = `&filters[lastInteraction][$lt]=${endStr}`;
+        }
+        // Example filter: &filters[lastInteraction][$gte]=2023-09-01T00:00:00.000Z&filters[lastInteraction][$lt]=2023-10-01T00:00:00.000Z
+
+        const customersResponse: any = await this.http
+          .get(`${this.apiUrl}/api/customers?${customerFilter}${dateFilter}&populate=*`)
+          .toPromise();
+
+        resolve(customersResponse.data);
+      } catch (err) {
+        console.error('Error fetching customers:', err);
+        reject(err);
+      }
+    });
+  }
+
 }
