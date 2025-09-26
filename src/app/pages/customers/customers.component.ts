@@ -10,6 +10,10 @@ import { FormsModule } from '@angular/forms';
 import { SelectComponent } from '../../shared/components/form/select/select.component';
 import { Label } from '@amcharts/amcharts5';
 import { LabelComponent } from '../../shared/components/form/label/label.component';
+import { ButtonComponent } from '../../shared/components/ui/button/button.component';
+import { AlertComponent } from '../../shared/components/ui/alert/alert.component';
+import { CardComponent } from '../stepper/card/card.component';
+import { ComponentCardComponent } from '../../shared/components/common/component-card/component-card.component';
 
 interface MultiOption {
   value: string;
@@ -32,15 +36,15 @@ export interface Option {
       MultiSelectComponent,
       FormsModule,
       SelectComponent,
-      LabelComponent],
+      LabelComponent, ButtonComponent],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.css'
 })
 export class CustomersComponent {
   customers: any[] = [];
 
-  selectedRows: string[] = [];
-  selectAll: boolean = false;
+  selectedCustomerRows: string[] = [];
+  selectAllCustomers: boolean = false;
 
   selectedValue = '';
   selectedValues: string[] = [];
@@ -78,10 +82,6 @@ export class CustomersComponent {
       
       this.reloadCustomers();
     });
-
-  }
-
-  handleSelectAll(){
   }
 
   reloadCustomers(){
@@ -158,14 +158,110 @@ export class CustomersComponent {
     this.reloadCustomers();
   }
 
+  handleCSVExport() {
+    const headers = ['Name', 'E-Mail', 'Geburstag', 'Beigetreten am', 'Letzte Interaktion', 'Loyalty Programme'];
+  
+    // only those customers which are selected
+    const customersToExport = this.customers.filter(customer => this.selectedCustomerRows.includes(customer.id));
+  
+    // map customers to rows
+    const rows = customersToExport.map(customer => {
+      const loyaltyPrograms = customer.loyaltyPrograms ? customer.loyaltyPrograms.map((lp: any) => lp.attributes.programName).join('; ') : '';
+      return [
+        customer.attributes.name || '',
+        customer.attributes.email || '',
+        customer.attributes.birthday || '',
+        new Date(customer.attributes.createdAt).toLocaleDateString() || '',
+        this.getLastInteraction(customer) || '',
+        loyaltyPrograms
+      ];
+    });
+  
+    const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
+  
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "MeineKunden.csv");
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  handleExcelExport() {
+    const headers = ['Name', 'E-Mail', 'Geburstag', 'Beigetreten am', 'Letzte Interaktion', 'Loyalty Programme'];
+      
+    // only those customers which are selected
+    const customersToExport = this.customers.filter(customer => this.selectedCustomerRows.includes(customer.id));
+    // map customers to rows
+    const rows = customersToExport.map(customer => {
+      const loyaltyPrograms = customer.loyaltyPrograms ? customer.loyaltyPrograms.map((lp: any) => lp.attributes.programName).join('; ') : '';
+      return [
+        customer.attributes.name || '',
+        customer.attributes.email || '',
+        customer.attributes.birthday || '',
+        new Date(customer.attributes.createdAt).toLocaleDateString() || '',
+        this.getLastInteraction(customer) || '',
+        loyaltyPrograms
+      ];
+    }
+    );
+      
+    let excelContent = '<table><tr>';
+    headers.forEach(header => {
+      excelContent += `<th>${header}</th>`;
+    }
+    );
+    excelContent += '</tr>';
+    rows.forEach(row => {
+      excelContent += '<tr>';
+      row.forEach(cell => {
+        excelContent += `<td>${cell}</td>`;
+      }
+      );
+      excelContent += '</tr>';
+    }
+    );
+    excelContent += '</table>';
+      
+    const blob = new Blob([excelContent], { type: 'application/vnd.ms-excel' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "MeineKunden.xls");
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
 
   handleRowSelect(id: string) {
-    if (this.selectedRows.includes(id)) {
-      this.selectedRows = this.selectedRows.filter(rowId => rowId !== id);
+    if (this.selectedCustomerRows.includes(id)) {
+      this.selectedCustomerRows = this.selectedCustomerRows.filter(rowId => rowId !== id);
     } else {
-      this.selectedRows = [...this.selectedRows, id];
+      this.selectedCustomerRows = [...this.selectedCustomerRows, id];
     }
+    console.log(this.selectedCustomerRows);
   }
+
+
+  handleSelectAllCustomers(){
+    this.selectAllCustomers = !this.selectAllCustomers;
+
+    this.selectedCustomerRows = [];
+
+    this.customers.forEach(customer => {
+      if (this.selectAllCustomers) {
+        this.selectedCustomerRows.push(customer.id);
+      } else {
+        this.selectedCustomerRows = this.selectedCustomerRows.filter(id => id !== customer.id);
+      }
+    });
+  }
+
 
   getBadgeColor(type: string): 'success' | 'warning' | 'error' {
     if (type === 'Complete') return 'success';
@@ -217,6 +313,20 @@ export class CustomersComponent {
         return 'error';
       }
       return 'error';
+    }
+
+    deleteCustomers() {
+      // only those customers which are selected
+      const customersToDelete = this.customers.filter(customer => this.selectedCustomerRows.includes(customer.id));
+
+      customersToDelete.forEach(customer => {
+        this.dataService.deleteCustomer(customer.id).then(() => {
+          // remove customer from list
+          this.customers = this.customers.filter(c => c.id !== customer.id);
+          // also remove from selected rows
+          this.selectedCustomerRows = this.selectedCustomerRows.filter(id => id !== customer.id);
+        });
+      });
     }
 
 }

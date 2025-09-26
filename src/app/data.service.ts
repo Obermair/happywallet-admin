@@ -10,6 +10,11 @@ export class DataService  {
   public currentUser: any = null;
   public loyaltyPrograms: any;
 
+  public downloadIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5"/></svg>`
+  public trashIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`
+  public excelIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5h4a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><line x1="7" y1="3" x2="7" y2="8"></line><line x1="11" y1="3" x2="11" y2="8"></line><line x1="3" y1="17" x2="21" y2="17"></line></svg>`;
+  public csvIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5h4a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><line x1="7" y1="3" x2="7" y2="8"></line><line x1="11" y1="3" x2="11" y2="8"></line><line x1="3" y1="19" x2="21" y2="19"></line></svg>`;
+
   constructor(private http: HttpClient) { }
 
   public signIn(username: string, password: string): void {
@@ -310,6 +315,20 @@ export class DataService  {
         console.error('Error fetching customers:', err);
         reject(err);
       }
+    });
+  }
+
+  public deleteCustomer(id: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.http.delete(this.apiUrl + '/api/customers/' + id).subscribe(
+        (data: any) => {
+          resolve(data);
+        },
+        (err: Error) => {
+          console.error('Error deleting customer:', err);
+          reject(err);
+        }
+      );
     });
   }
 
