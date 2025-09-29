@@ -7,16 +7,25 @@ import { DemographicCardComponent } from '../../../shared/components/ecommerce/d
 import { RecentOrdersComponent } from '../../../shared/components/ecommerce/recent-orders/recent-orders.component';
 import { DataService } from '../../../data.service';
 import { cos } from '@amcharts/amcharts5/.internal/core/util/Math';
+import { SafeHtmlPipe } from '../../../shared/pipe/safe-html.pipe';
+import {
+  ApexNonAxisChartSeries,
+  ApexChart,
+  ApexPlotOptions,
+  ApexFill,
+  ApexStroke,
+  ApexOptions,
+  NgApexchartsModule,
+} from 'ng-apexcharts';
+
 
 @Component({
   selector: 'app-ecommerce',
   imports: [
-    EcommerceMetricsComponent,
     MonthlySalesChartComponent,
-    MonthlyTargetComponent,
-    StatisticsChartComponent,
-    DemographicCardComponent,
     RecentOrdersComponent,
+    SafeHtmlPipe,
+    NgApexchartsModule
   ],
   templateUrl: './ecommerce.component.html',
 })
@@ -29,6 +38,25 @@ export class EcommerceComponent  {
   stampCardsCompleted = 0;
   stampCardPercentage = 0;
 
+  public fill: ApexFill = {
+    type: 'solid',
+    colors: ['#c38e70'],
+  };
+
+  public stroke: ApexStroke = {
+    lineCap: 'round',
+  };
+
+  public series: ApexNonAxisChartSeries = [0];
+  public chart: ApexChart = {
+    fontFamily: 'Outfit, sans-serif',
+    type: 'radialBar',
+    height: 330,
+    sparkline: { enabled: true },
+  };
+
+  public labels: string[] = ['Progress'];
+  public colors: string[] = ['#465FFF'];
 
   constructor(public dataService: DataService) {
   }
@@ -38,25 +66,18 @@ export class EcommerceComponent  {
     if (userId) {
       this.dataService.getCurrentLoyaltyProgramsCount(userId).then((count: number) => {
         this.currentLoyaltyProgramsCount = count;
-        console.log('Aktuelle Anzahl der Treueprogramme:', count);
       });
 
       this.dataService.getCurrentCustomersCount().then((count: any) => {
         this.currentCustomersCount = count;
-        console.log('Aktuelle Anzahl der Kunden:', count);
       });
 
       this.dataService.getCompletedStampCardsStats(userId).then((data: any) => {
         this.stampCardsCompleted = data.completed;
         this.stampCardPercentage = data.percentage;
-        this.currentCustomersCount = data.total;
-        console.log('Aktuelle Anzahl der vergebenen Stempelkarten:', data.total);
-        console.log('Anzahl der abgeschlossenen Stempelkarten:', data.completed);
-        console.log('Prozentsatz der abgeschlossenen Stempelkarten:', data.percentage);
-      });
+        this.currentStampCardsCount = data.total;
 
-      this.dataService.getProgramUsersByMonth(userId).then((data: any) => {
-        console.log('Nutzer pro Monat:', data);
+        this.series = [this.stampCardPercentage];
       });
 
       this.dataService.getLastFiveCustomers(userId).then((data: any) => {
@@ -70,6 +91,31 @@ export class EcommerceComponent  {
       this.currentCustomersCount = 0;
     }
   }
+
+  public plotOptions: ApexPlotOptions = {
+    radialBar: {
+      startAngle: -85,
+      endAngle: 85,
+      hollow: { size: '80%' },
+      track: {
+        background: '#E4E7EC',
+        strokeWidth: '100%',
+        margin: 5,
+      },
+      dataLabels: {
+        name: { show: false },
+        value: {
+          fontSize: '36px',
+          fontWeight: '600',
+          offsetY: -40,
+          color: '#1D2939',
+          formatter: (val: number) => `${val}%`,
+        },
+      },
+    },
+  };
+
+
 
 }
 

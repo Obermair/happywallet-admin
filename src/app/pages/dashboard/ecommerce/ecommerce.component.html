@@ -1,23 +1,72 @@
 <div class="grid grid-cols-12 gap-4 md:gap-6">
   <div class="col-span-12 space-y-6 xl:col-span-7">
-    <div><app-ecommerce-metrics /></div>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
+        <!-- Metric Item Start -->
+        <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+          <div class="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800" [innerHTML]="dataService.groupIcon | safeHtml">
+          </div>
+          <div class="flex items-end justify-between mt-5">
+            <div>
+              <span class="text-sm text-gray-500 dark:text-gray-400">Aktive Kunden</span>
+              <h4 class="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">{{ currentCustomersCount }}</h4>
+            </div>
+          </div>
+        </div>
+        <!-- Metric Item End -->
 
-    <div><app-monthly-sales-chart /></div>
+        <!-- Metric Item Start -->
+        <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+          <div class="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800" [innerHTML]="dataService.loyaltyCard| safeHtml">
+          </div>
+          <div class="flex items-end justify-between mt-5">
+            <div>
+              <span class="text-sm text-gray-500 dark:text-gray-400">Vergebene Stempelkarten</span>
+              <h4 class="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">{{ currentStampCardsCount }}</h4>
+            </div>
+          </div>
+        </div>
+        <!-- Metric Item End -->
+      </div>
+
+      <div>
+      <app-monthly-sales-chart/>
+    </div>
   </div>
 
   <div class="col-span-12 xl:col-span-5">
-    <app-monthly-target />
-  </div>
+    <div class="rounded-2xl border border-gray-200 bg-gray-100 dark:border-gray-800 dark:bg-white/[0.03]">
+      <div class="px-5 pt-5 bg-white shadow-default rounded-2xl pb-11 dark:bg-gray-900 sm:px-6 sm:pt-6">
+        <div class="flex justify-between">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">
+              Abgeschlossene Stempelkarten
+            </h3>
+            <p class="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
+              {{ stampCardsCompleted }} von {{ currentStampCardsCount }} Stempelkarten wurden abgeschlossen.
+            </p>
+          </div>
+        </div>
+        <div class="relative">
+          <div class="max-h-[330px]" id="chartDarkStyle">
+            <apx-chart
+              [series]="series"
+              [chart]="chart"
+              [plotOptions]="plotOptions"
+              [fill]="fill"
+              [stroke]="stroke"
+              [labels]="labels"
+              [colors]="colors"
+            ></apx-chart>
+          </div>
+        </div>
+        <p class="mx-auto mt-10 w-full max-w-[380px] text-center text-sm text-gray-500 sm:text-base">
+          {{stampCardPercentage }}% deiner vergebenen Stempelkarten wurden bereits abgeschlossen.
+        </p>
+      </div>
+    </div>
+    <div class="mt-6">
+      <app-recent-orders/>
+    </div>
 
-  <div class="col-span-12">
-    <app-statics-chart />
-  </div>
-
-  <div class="col-span-12 xl:col-span-5">
-    <app-demographic-card />
-  </div>
-
-  <div class="col-span-12 xl:col-span-7">
-    <app-recent-orders/>
   </div>
 </div>

@@ -14,88 +14,86 @@
 
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-// import { TableComponent } from '../../ui/table/table.component';
-// import { TableBodyComponent } from '../../ui/table/table-body.component';
-// import { TableCellComponent } from '../../ui/table/table-cell.component';
-// import { TableHeaderComponent } from '../../ui/table/table-header.component';
-// import { TableRowComponent } from '../../ui/table/table-row.component';
 import { BadgeComponent } from '../../ui/badge/badge.component';
+import { DataService } from '../../../../data.service';
+import { AvatarTextComponent } from '../../ui/avatar/avatar-text.component';
 
-interface Product {
-  id: number;
-  name: string;
-  variants: string;
-  category: string;
-  price: string;
-  image: string;
-  status: 'Delivered' | 'Pending' | 'Canceled';
-}
 
 @Component({
   selector: 'app-recent-orders',
   imports: [
     CommonModule,
-    // TableComponent,
-    // TableBodyComponent,
-    // TableCellComponent,
-    // TableHeaderComponent,
-    // TableRowComponent,
-    BadgeComponent,
+    AvatarTextComponent,
+    BadgeComponent
   ],
   templateUrl: './recent-orders.component.html'
 })
 export class RecentOrdersComponent {
-  tableData: Product[] = [
-    {
-      id: 1,
-      name: "MacBook Pro 13”",
-      variants: "2 Variants",
-      category: "Laptop",
-      price: "$2399.00",
-      status: "Delivered",
-      image: "/images/product/product-01.jpg",
-    },
-    {
-      id: 2,
-      name: "Apple Watch Ultra",
-      variants: "1 Variant",
-      category: "Watch",
-      price: "$879.00",
-      status: "Pending",
-      image: "/images/product/product-02.jpg",
-    },
-    {
-      id: 3,
-      name: "iPhone 15 Pro Max",
-      variants: "2 Variants",
-      category: "SmartPhone",
-      price: "$1869.00",
-      status: "Delivered",
-      image: "/images/product/product-03.jpg",
-    },
-    {
-      id: 4,
-      name: "iPad Pro 3rd Gen",
-      variants: "2 Variants",
-      category: "Electronics",
-      price: "$1699.00",
-      status: "Canceled",
-      image: "/images/product/product-04.jpg",
-    },
-    {
-      id: 5,
-      name: "AirPods Pro 2nd Gen",
-      variants: "1 Variant",
-      category: "Accessories",
-      price: "$240.00",
-      status: "Delivered",
-      image: "/images/product/product-05.jpg",
-    },
+
+  lastFiveCustomers: any[] = [
+    // Example structure of customer data
+    // { customerName: 'John Doe', customerEmail: 'john.doe@example.com' }
+    { customerName: 'John Doe', customerEmail: 'john.doe@example.com' },
+    { customerName: 'Jane Smith', customerEmail: 'jane.smith@example.com' },
+    { customerName: 'Alice Johnson', customerEmail: 'alice.johnson@example.com' },
+    { customerName: 'Bob Brown', customerEmail: 'bob.brown@example.com' },
+    { customerName: 'Charlie Davis', customerEmail: 'charlie.davis@example.com' }
   ];
 
-  getBadgeColor(status: string): 'success' | 'warning' | 'error' {
-    if (status === 'Delivered') return 'success';
-    if (status === 'Pending') return 'warning';
-    return 'error';
-  }
+  constructor(public dataService: DataService) { }
+  
+   ngOnInit(): void {
+      const userId = localStorage.getItem('jwt_user_id');
+      if (userId) {
+        this.dataService.getLastFiveCustomers(userId).then((data: any) => {
+          this.lastFiveCustomers = data;
+
+          // order by updatedAt descending
+          this.lastFiveCustomers.sort((a, b) => {
+            return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+          });
+        });
+      }
+      else {
+        console.warn('jwt_user_id not found in localStorage');
+      }
+    }
+
+    formatdate(dateString: string): string {
+      //you get datestring and i want to format it to vor 10 min, oder vor 2 stunden, oder vor 3 tagen
+      const date = new Date(dateString);
+      const now = new Date();
+      const diff = now.getTime() - date.getTime(); // difference in milliseconds
+
+      const minutes = Math.floor(diff / (1000 * 60));
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      if (minutes < 1) {
+        return 'gerade eben';
+      } else if (minutes < 60) {
+        return `vor ${minutes} ${minutes === 1 ? 'Minute' : 'Minuten'}`;
+      } else if (hours < 24) {
+        return `vor ${hours} ${hours === 1 ? 'Stunde' : 'Stunden'}`;
+      } else {
+        return `vor ${days} ${days === 1 ? 'Tag' : 'Tagen'}`;
+      } 
+    }
+
+
+    getColorForLastInteraction(dateString: string) {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diff = now.getTime() - date.getTime(); // difference in milliseconds
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      if (days <= 7) {
+        return 'success'; 
+      } else if (days <= 30) {
+        return 'warning'; 
+      } else {
+        return 'error';
+      }
+    }
 }

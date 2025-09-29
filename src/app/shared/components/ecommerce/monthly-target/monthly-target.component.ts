@@ -17,8 +17,6 @@ import { DropdownItemComponent } from '../../ui/dropdown/dropdown-item/dropdown-
   imports: [
     CommonModule,
     NgApexchartsModule,
-    DropdownComponent,
-    DropdownItemComponent,
   ],
   templateUrl: './monthly-target.component.html',
 })

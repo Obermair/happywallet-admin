@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { NgApexchartsModule, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexPlotOptions, ApexDataLabels, ApexStroke, ApexLegend, ApexYAxis, ApexGrid, ApexFill, ApexTooltip } from 'ng-apexcharts';
 import { DropdownComponent } from '../../ui/dropdown/dropdown.component';
 import { DropdownItemComponent } from '../../ui/dropdown/dropdown-item/dropdown-item.component';
+import { DataService } from '../../../../data.service';
 
 @Component({
   selector: 'app-monthly-sales-chart',
@@ -10,22 +11,20 @@ import { DropdownItemComponent } from '../../ui/dropdown/dropdown-item/dropdown-
   imports: [
     CommonModule,
     NgApexchartsModule,
-    DropdownComponent,
-    DropdownItemComponent,
   ],
   templateUrl: './monthly-sales-chart.component.html'
 })
 export class MonthlySalesChartComponent {
   public series: ApexAxisChartSeries = [
     {
-      name: 'Sales',
-      data: [168, 385, 201, 298, 187, 195, 291, 110, 215, 390, 280, 112],
+      name: 'Stempelkarten',
+      data: [0,0,0,0,0,0,0,0,0,0,0,0],
     },
   ];
   public chart: ApexChart = {
     fontFamily: 'Outfit, sans-serif',
     type: 'bar',
-    height: 180,
+    height: 600,
     toolbar: { show: false },
   };
   public xaxis: ApexXAxis = {
@@ -73,5 +72,20 @@ export class MonthlySalesChartComponent {
 
   closeDropdown() {
     this.isOpen = false;
+  }
+
+  constructor(public dataService: DataService) { }
+
+  ngOnInit(): void {
+    const userId = localStorage.getItem('jwt_user_id');
+    if (userId) {
+      this.dataService.getProgramUsersByMonth(userId).then((data: any) => {
+        this.xaxis.categories = data.categories;
+        this.series = [{ name: 'Vergebene Stempelkarte', data: data.counts }];
+      });
+    }
+    else {
+      console.warn('jwt_user_id not found in localStorage');
+    }
   }
 }
