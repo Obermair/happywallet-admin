@@ -87,6 +87,7 @@ export class CustomersComponent {
   reloadCustomers(){
     this.dataService.getCustomersByLoyaltyPrograms(this.selectedValues).then((customers: any) => {
       this.customers = customers;
+      console.log(this.customers);
 
       this.filterByLastInteraction(this.customers);
 
@@ -320,7 +321,7 @@ export class CustomersComponent {
       const customersToDelete = this.customers.filter(customer => this.selectedCustomerRows.includes(customer.id));
 
       customersToDelete.forEach(customer => {
-        this.dataService.deleteCustomer(customer.id).then(() => {
+        this.dataService.deleteCustomer(customer).then(() => {
           // remove customer from list
           this.customers = this.customers.filter(c => c.id !== customer.id);
           // also remove from selected rows

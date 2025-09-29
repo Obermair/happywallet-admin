@@ -4,6 +4,9 @@ import { PageBreadcrumbComponent } from '../../shared/components/common/page-bre
 import { UserMetaCardComponent } from '../../shared/components/user-profile/user-meta-card/user-meta-card.component';
 import { UserInfoCardComponent } from '../../shared/components/user-profile/user-info-card/user-info-card.component';
 import { UserAddressCardComponent } from '../../shared/components/user-profile/user-address-card/user-address-card.component';
+import { ButtonComponent } from '../../shared/components/ui/button/button.component';
+import { CardComponent } from '../stepper/card/card.component';
+import { ComponentCardComponent } from '../../shared/components/common/component-card/component-card.component';
 
 @Component({
   selector: 'app-profile',
@@ -11,8 +14,7 @@ import { UserAddressCardComponent } from '../../shared/components/user-profile/u
     CommonModule,
     PageBreadcrumbComponent,
     UserMetaCardComponent,
-    UserInfoCardComponent,
-    UserAddressCardComponent,
+    ComponentCardComponent
   ],
   templateUrl: './profile.component.html',
   styles: ``

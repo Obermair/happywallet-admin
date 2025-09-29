@@ -1,11 +1,106 @@
-<app-page-breadcrumb pageTitle="Profile" />
+<app-page-breadcrumb pageTitle="Mein Profil" />
 <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
-  <h3 class="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
-    Profile
-  </h3>
-  <div class="space-y-6">
+<div>
     <div><app-user-meta-card/></div>
-    <div><app-user-info-card/></div>
-    <div><app-user-address-card/></div>
-  </div>
+    <div class="bg-white-100 py-6">
+      <div class="mx-auto">
+        <div class="flex flex-col items-center md:flex-row rounded-2xl ring-1 ring-gray-200 lg:mx-0 lg:max-w-none dark:bg-gray-800/50 dark:ring-white/10">
+          <div class="py-6 px-6 w-full md:w-1/2">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-2">
+            Ein Preis. Alle Features.
+            </h3>
+            <p class="mt-2 text-base/7 text-gray-600 dark:text-gray-300">Mit happywallet ist alles für deine digitale Stempelkarte in einem Plan inkludiert – einfach und fair.</p>
+            <div class="mt-4 flex items-center gap-x-4">
+              <h4 class="flex-none text-sm/6 font-semibold text-brand-600 dark:text-brand-400">Was alles dabei ist</h4>
+              <div class="h-px flex-auto bg-gray-100 dark:bg-white/10"></div>
+            </div>
+            <ul role="list" class="mt-2 grid grid-cols-1 gap-2 text-sm/6 text-gray-600 sm:grid-cols-2 sm:gap-6 dark:text-gray-300">
+              <li class="flex gap-x-">
+                <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="h-6 w-5 flex-none text-brand-600 dark:text-brand-400">
+                  <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
+                </svg>
+                Unbegrenzte Stempelkarten
+              </li>
+              <li class="flex gap-x-3">
+                <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="h-6 w-5 flex-none text-brand-600 dark:text-brand-400">
+                  <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
+                </svg>
+                Automatisch generierte QR-Code Flyer
+              </li>
+              <li class="flex gap-x-3">
+                <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="h-6 w-5 flex-none text-brand-600 dark:text-brand-400">
+                  <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
+                </svg>
+                Integration von Apple & Google Wallet
+              </li>
+              <li class="flex gap-x-3">
+                <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="h-6 w-5 flex-none text-brand-600 dark:text-brand-400">
+                  <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
+                </svg>
+                Einfacher Verwaltung von Kunden
+              </li>
+            </ul>
+          </div>
+          <div class="p-2 w-full md:w-1/2 flex justify-center md:justify-end">
+            <div class="rounded-2xl items-center bg-gray-50 py-10 text-center inset-ring inset-ring-gray-900/5 lg:flex lg:flex-col lg:justify-center lg:py-16 dark:bg-gray-900 dark:inset-ring-white/10 w-full max-w-md">
+              <div class="mx-auto max-w-xs px-8 w-full">
+                <p class="text-base font-semibold text-gray-600 dark:text-gray-400">Dein aktueller Preis</p>
+                <p class="mt-6 flex items-baseline justify-center gap-x-2">
+                  <span class="text-5xl font-semibold tracking-tight text-gray-900 dark:text-white">€9</span>
+                  <span class="text-sm/6 font-semibold tracking-wide text-gray-600 dark:text-gray-400">pro Monat</span>
+                </p>
+                <a href="#" class="mt-4 block w-full rounded-md bg-gray-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-brand-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:bg-brand-500 dark:shadow-none dark:hover:bg-brand-400 dark:focus-visible:outline-brand-500">Jetzt abonnieren</a>
+                <!-- Fall back button for unsubscribe -  -->
+                <a href="#" class="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-center text-sm text-gray-900 hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:border-gray-700 dark:text-white/90 dark:hover:bg-white/[0.03] dark:focus-visible:outline-brand-500">Abo kündigen</a>
+ 
+                <p class="mt-2 text-xs/5 text-gray-600 dark:text-gray-400">Du hast noch 16 Tage bis zur nächsten Abrechnung</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Rechnungen -->
+    <app-component-card class="mt-6" title="Rechnungen" desc="Hier findest du eine Übersicht deiner bisherigen Rechnungen.">
+      <div>
+        <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+          <table class="min-w-full">
+            <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
+              <tr>
+                <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+                  Datum
+                </th>
+                <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+                  Betrag
+                </th>
+                <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+                  Status
+                </th>
+                <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-end">
+                  Aktion
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
+              <tr>
+                <td class="px-6 py-4 sm:px-6 text-sm leading-5 text-gray-500 dark:text-gray-400">
+                  12. Juni 2024
+                </td>
+                <td class="px-6 py-4 sm:px-6 text-sm leading-5 text-gray-500 dark:text-gray-400">
+                  €9,00
+                </td>
+                <td class="px-6 py-4 sm:px-6 text-sm leading-5">
+                  <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-800/20 dark:text-green-200">
+                    Bezahlt
+                  </span>
+                </td>
+                <td class="px-6 py-4 sm:px-6 text-sm leading-5 justify-end text-end">
+                  <a href="#" class="font-medium text-gray-900 dark:text-gray-100">Rechnung herunterladen</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </app-component-card>
 </div>
