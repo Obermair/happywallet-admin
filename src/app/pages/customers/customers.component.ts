@@ -87,8 +87,6 @@ export class CustomersComponent {
   reloadCustomers(){
     this.dataService.getCustomersByLoyaltyPrograms(this.selectedValues).then((customers: any) => {
       this.customers = customers;
-      console.log(this.customers);
-
       this.filterByLastInteraction(this.customers);
 
       // Fetch loyalty programs for each customer
@@ -245,7 +243,6 @@ export class CustomersComponent {
     } else {
       this.selectedCustomerRows = [...this.selectedCustomerRows, id];
     }
-    console.log(this.selectedCustomerRows);
   }
 
 

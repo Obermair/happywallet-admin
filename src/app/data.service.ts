@@ -22,12 +22,49 @@ export class DataService  {
 
   constructor(private http: HttpClient) { }
 
-  public signIn(username: string, password: string): void {
-    this.http.post(this.apiUrl + '/api/auth/local', {
-      identifier: username,
-      password: password,
-    }).subscribe(
-      (data: any) => {
+  public signIn(username: string, password: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl + '/api/auth/local', {
+        identifier: username,
+        password: password,
+      }).subscribe(
+          (data: any) => {
+          // Store JWT and user info in localStorage
+          localStorage.setItem('jwt_token', data.jwt);
+          localStorage.setItem('jwt_user', data.user.username);
+          localStorage.setItem('jwt_user_id', data.user.id);
+          localStorage.setItem('jwt_user_description', data.user.description);
+          localStorage.setItem('jwt_user_email', data.user.email);
+          this.saveCurrentUser();
+          resolve(data);
+        },
+        (err: Error) => {
+          console.error('Error during sign-in:', err);
+          reject(err);
+        }
+      );
+    });
+  }
+
+  public signOut(): Promise<void> {
+    return new Promise((resolve) => {
+      localStorage.removeItem('jwt_token');
+      localStorage.removeItem('jwt_user');
+      localStorage.removeItem('jwt_user_id');
+      localStorage.removeItem('jwt_user_description');
+      localStorage.removeItem('jwt_user_email');
+      this.currentUser = null;
+      resolve();
+    });
+  }
+
+  public register(username: string, email: string, password: string): Observable<any> {
+    return this.http.post(this.apiUrl + '/api/auth/local/register', {
+      username: username,
+      email: email,
+      password: password
+    }).pipe(
+      map((data: any) => {
         // Store JWT and user info in localStorage
         localStorage.setItem('jwt_token', data.jwt);
         localStorage.setItem('jwt_user', data.user.username);
@@ -35,20 +72,23 @@ export class DataService  {
         localStorage.setItem('jwt_user_description', data.user.description);
         localStorage.setItem('jwt_user_email', data.user.email);
         this.saveCurrentUser();
-      },
-      (err: Error) => {
-        console.error('Error during sign-in:', err);
-      }
+        return data;
+      })
     );
   }
 
-  resetLocalStorage(): void {
-    localStorage.removeItem('jwt_token');
-    localStorage.removeItem('jwt_user');
-    localStorage.removeItem('jwt_user_id');
-    localStorage.removeItem('jwt_user_description');
-    localStorage.removeItem('jwt_user_email');
-    this.currentUser = null;
+  public forgotPassword(email: string): Observable<any> {
+    return this.http.post(this.apiUrl + '/api/auth/forgot-password', {
+      email: email,
+    });
+  }
+
+  public resetPassword(code: string, password: string, passwordConfirmation: string): Observable<any> {
+    return this.http.post(this.apiUrl + '/api/auth/reset-password', {
+      code: code,
+      password: password,
+      passwordConfirmation: passwordConfirmation,
+    });
   }
 
   public renewLocalStorage(userData: any): void {

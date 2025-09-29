@@ -7,19 +7,24 @@
   <div class="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
     <div class="flex flex-col items-center w-full gap-6 xl:flex-row">
       <div class="w-20 h-20 overflow-hidden border border-gray-200 rounded-full dark:border-gray-800">
-        <img [src]="dataService.apiUrl + dataService.currentUser.shopLogo.url" alt="user logo" />
+        <img [src]="getProfileImage()" alt="user logo" />
       </div>
       <div class="order-3 xl:order-2">
         <h4 class="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
-          {{ dataService.currentUser?.username }}
+          {{ dataService.currentUser?.username  }}
         </h4>
         <div class="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
           <p class="text-sm text-gray-500 dark:text-gray-400">
-            {{ dataService.currentUser?.email }}
+            <ng-container *ngIf="dataService.currentUser?.email">
+              {{ dataService.currentUser?.email }}
+            </ng-container>
           </p>
           <div class="hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block"></div>
           <p class="text-sm text-gray-500 dark:text-gray-400">
-            {{ dataService.currentUser?.street }}, {{ dataService.currentUser?.zipCode }} {{ dataService.currentUser?.city }}
+            <!-- Check if exists -->
+            <ng-container *ngIf="dataService.currentUser?.street || dataService.currentUser?.zipCode || dataService.currentUser?.city">
+              {{ dataService.currentUser?.street }}, {{ dataService.currentUser?.zipCode }} {{ dataService.currentUser?.city }}
+            </ng-container>
           </p>
         </div>
       </div>
@@ -233,7 +238,6 @@
     </div>
     <form class="flex flex-col">
       <div class="custom-scrollbar overflow-y-auto px-2 pb-3">
-        <p *ngIf="errorMessagePasswordChange != ''" class="text-red-500 text-sm font-bold mb-2">{{ errorMessagePasswordChange }}</p>
         <div class="mt-2">
           <div class="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
             <div class="col-span-2">

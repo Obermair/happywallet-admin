@@ -16,7 +16,4 @@ export class AppComponent {
 
   constructor(public dataService: DataService) {}
 
-  ngOnInit(): void {
-    this.dataService.signIn("mail@burgerlion.com", "asdfasdf");
-  }
 }

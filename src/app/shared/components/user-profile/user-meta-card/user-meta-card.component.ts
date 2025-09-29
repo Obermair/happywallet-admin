@@ -64,6 +64,16 @@ export class UserMetaCardComponent {
     );
   }
 
+  getProfileImage() {
+    if (this.uploadImage != null) {
+      return this.imageUrl;
+    } else if (this.dataService.currentUser?.shopLogo?.url) {
+      return this.dataService.apiUrl + this.dataService.currentUser.shopLogo.url;
+    } else {
+      return 'images/image.png'; // Pfad zum Platzhalterbild
+    }
+  }
+
   onDragOver(event: DragEvent) {
     event.preventDefault();
     this.isDragActive = true;

@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 
 export class AuthGuardService  {
   constructor(private router: Router) {}
+  
   canActivate(): boolean {
     if (localStorage.getItem('jwt_token') == null) {
       this.router.navigate(['/signin']);

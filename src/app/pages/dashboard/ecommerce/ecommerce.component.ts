@@ -80,10 +80,6 @@ export class EcommerceComponent  {
         this.series = [this.stampCardPercentage];
       });
 
-      this.dataService.getLastFiveCustomers(userId).then((data: any) => {
-        console.log('Letzte 5 Kunden:', data);
-      });
-
     } else {
       console.warn('jwt_user_id not found in localStorage');
       this.currentStampCardsCount = 0;
