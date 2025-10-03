@@ -46,6 +46,7 @@ export class DataService  {
     });
   }
 
+
   public signOut(): Promise<void> {
     return new Promise((resolve) => {
       localStorage.removeItem('jwt_token');
@@ -95,7 +96,6 @@ export class DataService  {
     localStorage.setItem('jwt_user', userData.username);
     localStorage.setItem('jwt_user_description', userData.description);
     localStorage.setItem('jwt_user_email', userData.email);
-    this.saveCurrentUser();
   }
 
   public saveCurrentUser(){

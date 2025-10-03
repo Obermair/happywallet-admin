@@ -25,6 +25,7 @@ import { CardComponent } from './pages/stepper/card/card.component';
 import { FormComponent } from './pages/stepper/form/form.component';
 import { FlyerComponent } from './pages/stepper/flyer/flyer.component';
 import { CustomersComponent } from './pages/customers/customers.component';
+import { GoogleCallbackComponent } from './pages/google-callback/google-callback.component';
 
 export const routes: Routes = [
   {
@@ -145,6 +146,11 @@ export const routes: Routes = [
     ]
   },
   // auth pages
+  {
+    path:'auth/google/callback',
+    component: GoogleCallbackComponent,
+    title:'happywallet - your digital loyalty card'
+  },
   {
     path:'signin',
     component:SignInComponent,

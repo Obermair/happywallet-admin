@@ -34,6 +34,22 @@ export class SigninFormComponent {
   constructor(public dataService: DataService, private router: Router) { }
 
   ngOnInit() {
+    window.addEventListener("message", (event) => {
+      if (event.origin !== window.location.origin) {
+        this.errorMessage = "Login fehlgeschlagen: Bitte versuchen Sie es erneut.";
+        return;
+      }
+      if (event.data.jwt) {    
+        console.log("Google Sign-In erfolgreich");
+        localStorage.setItem('jwt_token', event.data.jwt);
+        localStorage.setItem('jwt_user', event.data.user.username);
+        localStorage.setItem('jwt_user_id', event.data.user.id);
+        localStorage.setItem('jwt_user_email', event.data.user.email);
+        this.dataService.getCurrentUserPromise().then((user: any) => {
+          this.router.navigate(['/']);
+        });
+      }
+    });
   }
 
   togglePasswordVisibility() {
@@ -59,5 +75,13 @@ export class SigninFormComponent {
     }).catch(() => {
       this.errorMessage = 'Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre E-Mail-Adresse und Ihr Passwort.';
     });
+  }
+
+  signInWithGoogle() {
+    window.open(
+      this.dataService.apiUrl + "/api/connect/google",
+      "googleLogin",
+      "width=500,height=600,scrollbars=yes"
+    );
   }
 }
