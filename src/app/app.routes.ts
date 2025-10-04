@@ -26,6 +26,9 @@ import { FormComponent } from './pages/stepper/form/form.component';
 import { FlyerComponent } from './pages/stepper/flyer/flyer.component';
 import { CustomersComponent } from './pages/customers/customers.component';
 import { GoogleCallbackComponent } from './pages/google-callback/google-callback.component';
+import { ResetPasswordComponent } from './pages/auth-pages/reset-password/reset-password.component';
+import { EmailConfirmedComponent } from './pages/email-confirmation/email-confirmation.component';
+import { ForgotPasswordComponent } from './pages/auth-pages/forgot-password/forgot-password.component';
 
 export const routes: Routes = [
   {
@@ -149,6 +152,21 @@ export const routes: Routes = [
   {
     path:'auth/google/callback',
     component: GoogleCallbackComponent,
+    title:'happywallet - your digital loyalty card'
+  },
+  {
+    path:'email-confirmation',
+    component: EmailConfirmedComponent,
+    title:'happywallet - your digital loyalty card'
+  },
+  {
+    path:'forgot-password',
+    component: ForgotPasswordComponent,
+    title:'happywallet - your digital loyalty card'
+  },
+  {
+    path:'reset-password',
+    component: ResetPasswordComponent,
     title:'happywallet - your digital loyalty card'
   },
   {

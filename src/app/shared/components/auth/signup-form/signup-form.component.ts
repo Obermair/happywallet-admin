@@ -31,7 +31,13 @@ export class SignupFormComponent {
   shopName = '';
   errorMessage = '';
 
-  constructor(public dataService: DataService, private router: Router) { }
+  registrationSuccess = false;
+
+  constructor(public dataService: DataService, private router: Router) { 
+    if (localStorage.getItem('jwt_token') != null) {
+      this.router.navigate(['/']);
+    }
+  }
 
   ngOnInit() {
     window.addEventListener("message", (event) => {
@@ -66,7 +72,8 @@ export class SignupFormComponent {
     }
     this.dataService.register(this.shopName, this.email, this.password).subscribe({
       next: (user) => {
-        this.router.navigate(['/']);
+        this.registrationSuccess = true;
+        localStorage.setItem('registerUser', JSON.stringify({ email: this.email, password: this.password }));
       },
       error: () => {
         this.errorMessage = 'Die Registrierung ist fehlgeschlagen. Bitte versuchen Sie es erneut.';

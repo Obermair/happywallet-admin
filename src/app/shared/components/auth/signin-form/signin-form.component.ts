@@ -31,7 +31,11 @@ export class SigninFormComponent {
 
   errorMessage = '';
 
-  constructor(public dataService: DataService, private router: Router) { }
+  constructor(public dataService: DataService, private router: Router) {
+    if (localStorage.getItem('jwt_token') != null) {
+      this.router.navigate(['/']);
+    }
+  }
 
   ngOnInit() {
     window.addEventListener("message", (event) => {
@@ -84,4 +88,6 @@ export class SigninFormComponent {
       "width=500,height=600,scrollbars=yes"
     );
   }
+
+  
 }

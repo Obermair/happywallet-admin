@@ -66,13 +66,6 @@ export class DataService  {
       password: password
     }).pipe(
       map((data: any) => {
-        // Store JWT and user info in localStorage
-        localStorage.setItem('jwt_token', data.jwt);
-        localStorage.setItem('jwt_user', data.user.username);
-        localStorage.setItem('jwt_user_id', data.user.id);
-        localStorage.setItem('jwt_user_description', data.user.description);
-        localStorage.setItem('jwt_user_email', data.user.email);
-        this.saveCurrentUser();
         return data;
       })
     );
