@@ -1,0 +1,28 @@
+<div class="min-h-screen xl:flex">
+  <div
+      class="flex-1 transition-all duration-300 ease-in-out"
+  >
+    <!-- app header start -->
+    <header
+    class="sticky top-0 flex w-full bg-white border-gray-200 z-99999 dark:border-gray-800 dark:bg-gray-900 xl:border-b">
+    <div class="flex flex-col items-center justify-between grow xl:flex-row xl:px-6">
+        <div
+        class="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 dark:border-gray-800 sm:gap-4 xl:justify-normal xl:border-b-0 xl:px-0 lg:py-4">
+        <!-- Logo (placeholder) -->
+            <a>
+                <img class="dark:hidden" src="/images/logo/logo2.png" style="max-width: 150px;" alt="Logo" />
+                <img class="hidden dark:block" src="/images/logo/logo2-white.png" alt="Logo" />
+            </a>
+        </div>
+
+    </div>
+    </header>
+    <!-- app header end -->
+    <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+        <div class="rounded-2xl border border-gray-200 bg-white px-5 py-5 dark:border-gray-800 dark:bg-white/[0.03] lg:px-10 lg:py-10">      
+            <app-setup-stepper-nav [steps]="setupService.steps"></app-setup-stepper-nav>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+  </div>
+</div>

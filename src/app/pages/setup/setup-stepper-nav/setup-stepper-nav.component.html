@@ -1,0 +1,49 @@
+<div class="flex justify-center w-full mb-6">
+  <div
+    class="flex flex-col sm:flex-row w-full items-start sm:items-center rounded-xl border border-gray-200 bg-white p-4 dark:bg-gray-900 dark:text-white/90 dark:border-gray-700"
+  >
+    <ng-container *ngFor="let step of steps; let i = index">
+      <div class="flex sm:flex-1 items-start sm:items-center w-full mb-6 sm:mb-0 cursor-pointer" (click)="stepClicked(step)">
+        <!-- Circle -->
+        <ng-container [ngSwitch]="step.status">
+          <!-- Completed -->
+          <div *ngSwitchCase="'complete'"
+            class="flex items-center justify-center w-10 h-10 rounded-full bg-brand-600 text-white shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          </div>
+
+          <!-- Current -->
+          <div *ngSwitchCase="'current'"
+            class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-brand-600 text-brand-600 font-medium shrink-0">
+            {{ step.id | number:'2.0' }}
+          </div>
+
+          <!-- Upcoming -->
+          <div *ngSwitchCase="'upcoming'"
+            class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 text-gray-400 font-medium shrink-0">
+            {{ step.id | number:'2.0' }}
+          </div>
+        </ng-container>
+
+        <!-- Step label + description -->
+        <div class="ml-3">
+          <div
+            class="text-sm font-medium"
+            [ngClass]="{
+              'text-brand-600': step.status === 'current',
+              'text-gray-900': step.status === 'complete',
+              'text-gray-400': step.status === 'upcoming'
+            }"
+          >
+            {{ step.name }}
+          </div>
+          <div class="text-xs text-gray-500">
+            {{ step.description }}
+          </div>
+        </div>
+
+
+      </div>
+    </ng-container>
+  </div>
+</div>

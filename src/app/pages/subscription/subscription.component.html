@@ -1,0 +1,86 @@
+<div class="min-h-screen xl:flex">
+  <div
+      class="flex-1 transition-all duration-300 ease-in-out"
+  >
+    <!-- app header start -->
+    <header
+    class="sticky top-0 flex w-full bg-white border-gray-200 z-99999 dark:border-gray-800 dark:bg-gray-900 xl:border-b">
+    <div class="flex flex-col items-center justify-between grow xl:flex-row xl:px-6">
+        <div
+        class="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 dark:border-gray-800 sm:gap-4 xl:justify-normal xl:border-b-0 xl:px-0 lg:py-4">
+        <!-- Logo (placeholder) -->
+            <a>
+                <img class="dark:hidden" src="/images/logo/logo2.png" style="max-width: 150px;" alt="Logo" />
+                <img class="hidden dark:block" src="/images/logo/logo2-white.png" alt="Logo" />
+            </a>
+        </div>
+
+    </div>
+    </header>
+    <!-- app header end -->
+    <div class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+        <div class="rounded-2xl border border-gray-200 bg-white px-5 py-5 dark:border-gray-800 dark:bg-white/[0.03] lg:px-10 lg:py-10">      
+                <div class="bg-white-100 py-6">
+                <h1 class="text-2xl font-semibold text-gray-800 dark:text-white/90 lg:text-3xl">
+                {{ headline }}
+                </h1>
+                <p class="mt-2 text-base/7 text-gray-600 dark:text-gray-300 mb-5">{{ subline }}</p>
+                <div class="mx-auto">
+                    <div class="flex flex-col items-center md:flex-row rounded-2xl ring-1 ring-gray-200 lg:mx-0 lg:max-w-none dark:bg-gray-800/50 dark:ring-white/10">
+                    <div class="py-6 px-6 w-full md:w-1/2">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-2">
+                        Ein Preis. Alle Features.
+                        </h3>
+                        <p class="mt-2 text-base/7 text-gray-600 dark:text-gray-300">Mit happywallet ist alles für deine digitale Stempelkarte in einem Plan inkludiert – einfach und fair.</p>
+                        <div class="mt-4 flex items-center gap-x-4">
+                        <h4 class="flex-none text-sm/6 font-semibold text-brand-600 dark:text-brand-400">Was alles dabei ist</h4>
+                        <div class="h-px flex-auto bg-gray-100 dark:bg-white/10"></div>
+                        </div>
+                        <ul role="list" class="mt-2 grid grid-cols-1 gap-2 text-sm/6 text-gray-600 sm:grid-cols-2 sm:gap-6 dark:text-gray-300">
+                        <li class="flex gap-x-">
+                            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="h-6 w-5 flex-none text-brand-600 dark:text-brand-400">
+                            <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
+                            </svg>
+                            Unbegrenzte Stempelkarten
+                        </li>
+                        <li class="flex gap-x-3">
+                            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="h-6 w-5 flex-none text-brand-600 dark:text-brand-400">
+                            <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
+                            </svg>
+                            Automatisch generierte QR-Code Flyer
+                        </li>
+                        <li class="flex gap-x-3">
+                            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="h-6 w-5 flex-none text-brand-600 dark:text-brand-400">
+                            <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
+                            </svg>
+                            Integration von Apple & Google Wallet
+                        </li>
+                        <li class="flex gap-x-3">
+                            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="h-6 w-5 flex-none text-brand-600 dark:text-brand-400">
+                            <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
+                            </svg>
+                            Einfacher Verwaltung von Kunden
+                        </li>
+                        </ul>
+                    </div>
+                    <div class="p-2 w-full md:w-1/2 flex justify-center md:justify-end">
+                        <div class="rounded-2xl items-center bg-gray-50 py-10 text-center inset-ring inset-ring-gray-900/5 lg:flex lg:flex-col lg:justify-center lg:py-16 dark:bg-gray-900 dark:inset-ring-white/10 w-full max-w-md">
+                        <div class="mx-auto max-w-xs px-8 w-full">
+                            <p class="text-base font-semibold text-gray-600 dark:text-gray-400">Unser Basic Abo</p>
+                            <p class="mt-6 flex items-baseline justify-center gap-x-2">
+                            <span class="text-5xl font-semibold tracking-tight text-gray-900 dark:text-white">€9</span>
+                            <span class="text-sm/6 font-semibold tracking-wide text-gray-600 dark:text-gray-400">pro Monat</span>
+                            </p>
+                            <a href="#" class="mt-4 block w-full rounded-md bg-gray-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-brand-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:bg-brand-500 dark:shadow-none dark:hover:bg-brand-400 dark:focus-visible:outline-brand-500">Jetzt abonnieren</a>
+
+                            <p class="mt-2 text-xs/5 text-gray-600 dark:text-gray-400">14 Tage kostenlos testen</p>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+        </div>
+    </div>
+  </div>
+</div>

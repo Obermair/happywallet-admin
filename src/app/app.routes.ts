@@ -29,160 +29,76 @@ import { GoogleCallbackComponent } from './pages/google-callback/google-callback
 import { ResetPasswordComponent } from './pages/auth-pages/reset-password/reset-password.component';
 import { EmailConfirmedComponent } from './pages/email-confirmation/email-confirmation.component';
 import { ForgotPasswordComponent } from './pages/auth-pages/forgot-password/forgot-password.component';
+import { SetupComponent } from './pages/setup/setup.component';
+import { SubscriptionComponent } from './pages/subscription/subscription.component';
+import { OnboardGuardService } from './onboard.service';
+import { SetupProfileComponent } from './pages/setup/setup-profile/setup-profile.component';
+import { SetupCardComponent } from './pages/setup/setup-card/setup-card.component';
+import { SetupFormComponent } from './pages/setup/setup-form/setup-form.component';
+import { SetupFlyerComponent } from './pages/setup/setup-flyer/setup-flyer.component';
 
 export const routes: Routes = [
   {
-    path:'',
-    component:AppLayoutComponent, 
+    // Parent: nur Token-Check (AuthGuard). Alle wichtigen app-routes sind Kinder.
+    path: '',
     canActivate: [AuthGuardService],
-    children:[
+    children: [
+      // Setup & Subscription bleiben außerhalb des AppLayout (also anderes Design),
+      // sind aber trotzdem durch AuthGuard + OnboardGuard geschützt.
       {
-        path: '',
-        component: EcommerceComponent,
-        pathMatch: 'full',
-        title:
-          'happywallet - your digital loyalty card',
+        path: 'setup',
+        component: SetupComponent,
+        canActivate: [OnboardGuardService],
+        title: 'happywallet - your digital loyalty card',
+        children: [
+          { path: 'profile', component: SetupProfileComponent, title: 'happywallet - your digital loyalty card' },
+          { path: 'card', component: SetupCardComponent, title: 'happywallet - your digital loyalty card' },
+          { path: 'form', component: SetupFormComponent, title: 'happywallet - your digital loyalty card' },
+          { path: 'flyer', component: SetupFlyerComponent, title: 'happywallet - your digital loyalty card' },
+        ]
       },
       {
-        path: 'loyalty-programs',
-        component: LoyaltyProgramsComponent,
+        path: 'subscription',
+        component: SubscriptionComponent,
+        canActivate: [OnboardGuardService],
         title: 'happywallet - your digital loyalty card',
       },
+
+      // AppLayout selbst: OnboardGuard als canActivate → AppLayout wird nicht geladen,
+      // bevor OnboardGuard die Checks bestanden hat.
       {
-          path: 'loyalty-programs/create',
-          component: StepperComponent, 
-          title: 'happywallet - your digital loyalty card',
-          children: [
-            {
-              path: 'card',
-              component: CardComponent,
-              title: 'happywallet - your digital loyalty card'
-            },
-            {
-              path: 'form',
-              component: FormComponent,
-              title: 'happywallet - your digital loyalty card'
-            },
-            {
-              path: 'flyer',
-              component: FlyerComponent,
-              title: 'happywallet - your digital loyalty card'
-            }
-          ]      
-      },
-      {
-        path:'customers',
-        component: CustomersComponent,
-        title:'happywallet - your digital loyalty card'
-      },
-      {
-        path:'calendar',
-        component:CalenderComponent,
-        title:'happywallet - your digital loyalty card'
-      },
-      {
-        path:'profile',
-        component:ProfileComponent,
-        title:'happywallet - your digital loyalty card',
-      },
-      {
-        path:'form-elements',
-        component:FormElementsComponent,
-        title:'happywallet - your digital loyalty card'
-      },
-      {
-        path:'basic-tables',
-        component:BasicTablesComponent,
-        title:'happywallet - your digital loyalty card'
-      },
-      {
-        path:'blank',
-        component:BlankComponent,
-        title:'happywallet - your digital loyalty card'
-      },
-      // support tickets
-      {
-        path:'invoice',
-        component:InvoicesComponent,
-        title:'happywallet - your digital loyalty card'
-      },
-      {
-        path:'line-chart',
-        component:LineChartComponent,
-        title:'happywallet - your digital loyalty card'
-      },
-      {
-        path:'bar-chart',
-        component:BarChartComponent,
-        title:'happywallet - your digital loyalty card'
-      },
-      {
-        path:'alerts',
-        component:AlertsComponent,
-        title:'happywallet - your digital loyalty card'
-      },
-      {
-        path:'avatars',
-        component:AvatarElementComponent,
-        title:'happywallet - your digital loyalty card'
-      },
-      {
-        path:'badge',
-        component:BadgesComponent,
-        title:'happywallet - your digital loyalty card'
-      },
-      {
-        path:'buttons',
-        component:ButtonsComponent,
-        title:'happywallet - your digital loyalty card'
-      },
-      {
-        path:'images',
-        component:ImagesComponent,
-        title:'happywallet - your digital loyalty card'
-      },
-      {
-        path:'videos',
-        component:VideosComponent,
-        title:'happywallet - your digital loyalty card'
-      },
+        path: '',
+        component: AppLayoutComponent,
+        canActivate: [OnboardGuardService],
+        children: [
+          { path: '', component: EcommerceComponent, pathMatch: 'full', title: 'happywallet - your digital loyalty card' },
+          { path: 'loyalty-programs', component: LoyaltyProgramsComponent, title: 'happywallet - your digital loyalty card' },
+          {
+            path: 'loyalty-programs/create',
+            component: StepperComponent,
+            title: 'happywallet - your digital loyalty card',
+            children: [
+              { path: 'card', component: CardComponent, title: 'happywallet - your digital loyalty card' },
+              { path: 'form', component: FormComponent, title: 'happywallet - your digital loyalty card' },
+              { path: 'flyer', component: FlyerComponent, title: 'happywallet - your digital loyalty card' },
+            ]
+          },
+          { path: 'customers', component: CustomersComponent, title: 'happywallet - your digital loyalty card' },
+          { path: 'profile', component: ProfileComponent, title: 'happywallet - your digital loyalty card' },
+        ]
+      }
     ]
   },
-  // auth pages
-  {
-    path:'auth/google/callback',
-    component: GoogleCallbackComponent,
-    title:'happywallet - your digital loyalty card'
-  },
-  {
-    path:'email-confirmation',
-    component: EmailConfirmedComponent,
-    title:'happywallet - your digital loyalty card'
-  },
-  {
-    path:'forgot-password',
-    component: ForgotPasswordComponent,
-    title:'happywallet - your digital loyalty card'
-  },
-  {
-    path:'reset-password',
-    component: ResetPasswordComponent,
-    title:'happywallet - your digital loyalty card'
-  },
-  {
-    path:'signin',
-    component:SignInComponent,
-    title:'happywallet - your digital loyalty card'
-  },
-  {
-    path:'signup',
-    component:SignUpComponent,
-    title:'happywallet - your digital loyalty card'
-  },
-  // error pages
-  {
-    path:'**',
-    component:NotFoundComponent,
-    title:'happywallet - your digital loyalty card'
-  },
+
+  // public/auth pages (keine AppLayout)
+  { path:'auth/google/callback', component: GoogleCallbackComponent, title:'happywallet - your digital loyalty card' },
+  { path:'email-confirmation', component: EmailConfirmedComponent, title:'happywallet - your digital loyalty card' },
+  { path:'forgot-password', component: ForgotPasswordComponent, title:'happywallet - your digital loyalty card' },
+  { path:'reset-password', component: ResetPasswordComponent, title:'happywallet - your digital loyalty card' },
+  { path:'signin', component: SignInComponent, title:'happywallet - your digital loyalty card' },
+  { path:'signup', component: SignUpComponent, title:'happywallet - your digital loyalty card' },
+
+  // fallback
+  { path:'**', component: NotFoundComponent, title:'happywallet - your digital loyalty card' },
 ];
+

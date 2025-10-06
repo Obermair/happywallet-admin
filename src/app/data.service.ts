@@ -119,7 +119,7 @@ export class DataService  {
         return;
       }
 
-      this.http.get(this.apiUrl + '/api/users/' + userId + '?populate=shopLogo').subscribe(
+      this.http.get(this.apiUrl + '/api/users/' + userId + '?populate=*').subscribe(
         (data: any) => {
           this.currentUser = data;
           this.renewLocalStorage(data);

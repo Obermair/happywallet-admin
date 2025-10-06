@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
-@Injectable({
-  providedIn: 'root'
-})
-
-export class AuthGuardService  {
+@Injectable({ providedIn: 'root' })
+export class AuthGuardService implements CanActivate {
   constructor(private router: Router) {}
-  
-  canActivate(): boolean {
-    if (localStorage.getItem('jwt_token') == null) {
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    if (!localStorage.getItem('jwt_token')) {
       this.router.navigate(['/signin']);
       return false;
     }

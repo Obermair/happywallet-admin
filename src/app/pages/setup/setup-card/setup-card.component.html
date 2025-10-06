@@ -1,0 +1,144 @@
+<div class="flex justify-between w-full mb-6">
+    <app-button (click)="backToProfile()" [disabled]="false" size="sm" [startIcon]="setupService.previousIcon" variant="outline">
+        Zurück
+    </app-button>   
+    <app-button (click)="linkToForm()" [disabled]="!isFormValid()" size="sm" [endIcon]="setupService.nextIcon" variant="outline">
+        Nächster Schritt
+    </app-button>
+</div>
+<div class="flex grid grid-cols-1 gap-5 sm:grid-cols-1 lg:grid-cols-2">
+    <div>
+        <app-component-card title="Stempelkarte gestalten" desc="Erstellen Sie das Layout Ihrer digitalen Treuekarte, die Kunden zu ihrer Wallet hinzufügen können.">
+            <div>
+                <app-label>Kartenkennung</app-label>
+                <app-input-field [value]="setupService.loyaltyProgram.programName" (valueChange)="setupService.loyaltyProgram.programName = $event"  type="text" placeholder="Gib deinem Stempelprogramm einen Namen." />
+            </div>
+            <div>
+                <app-label>Kartenbeschreibung</app-label>
+                <app-input-field  [value]="setupService.loyaltyProgram.programDescription" (valueChange)="setupService.loyaltyProgram.programDescription = $event" type="text" placeholder="Erhalte einen Gratis Burger nach dem 7 Besuch bei uns." />
+            </div>
+            <div class="flex gap-4 justify-between w-full">
+                <div class="w-1/2">
+                    <app-label>Hintergrundfarbe</app-label>
+                    <input type="color"  class="p-1 h-10 w-full block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-900 dark:text-white/90 dark:border-gray-700" id="hs-color-input" [(ngModel)]="setupService.loyaltyProgram.backgroundColor" title="Wähle eine Farbe">
+                </div>
+                <div class="w-1/2">
+                    <app-label>Textfarbe</app-label>
+                    <input type="color" class="p-1 h-10 w-full block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-900 dark:text-white/90 dark:border-gray-700" id="hs-color-input" [(ngModel)]="setupService.loyaltyProgram.textColor" title="Wähle eine Farbe">
+                </div>
+                <div class="w-1/2">
+                    <app-label>Stempelfarbe</app-label>
+                    <input type="color" class="p-1 h-10 w-full block bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-900 dark:text-white/90 dark:border-gray-700" id="hs-color-input" [(ngModel)]="setupService.loyaltyProgram.stampColor" title="Wähle eine Farbe">
+                </div>
+            </div>
+            <div class="flex gap-4 justify-between w-full">
+                <div class="w-1/2">
+                    <app-label>Wie viele Stempel werden für eine Belohnung benötigt?</app-label>
+                    <div class="py-2 px-3 w-full inline-block bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-white/90 dark:border-gray-700" data-hs-input-number="">
+                        <div class="flex items-center justify-between gap-x-1.5">
+                            <button type="button" (click)="decreaseMaxPoints()" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" tabindex="-1" aria-label="Decrease" data-hs-input-number-decrement="">
+                                <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 12h14"></path>
+                                </svg>
+                            </button>
+                            <input [(ngModel)]="setupService.loyaltyProgram.maxPoints" readonly class="p-0 w-6 bg-transparent border-0 text-gray-800 text-center focus:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:text-white" style="-moz-appearance: textfield;" type="number" aria-roledescription="Number field" value="0" data-hs-input-number-input="">
+                            <button type="button" (click)="increaseMaxPoints()" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" tabindex="-1" aria-label="Increase" data-hs-input-number-increment="">
+                                <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 12h14"></path>
+                                    <path d="M12 5v14"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="w-1/2">
+                    <app-label>Anfangsstempel für neu ausgegebene Karten</app-label>
+                    <div class="py-2 px-3 w-full inline-block bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:text-white/90 dark:border-gray-700" data-hs-input-number="">
+                        <div class="flex items-center justify-between gap-x-1.5">
+                            <button type="button" (click)="decreaseStartPoints()" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" tabindex="-1" aria-label="Decrease" data-hs-input-number-decrement="">
+                                <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 12h14"></path>
+                                </svg>
+                            </button>
+                            <input [(ngModel)]="setupService.loyaltyProgram.startPoints" class="p-0 w-6 bg-transparent border-0 text-gray-800 text-center focus:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:text-white" style="-moz-appearance: textfield;" type="number" aria-roledescription="Number field" value="0" data-hs-input-number-input="">
+                            <button type="button" (click)="increaseStartPoints()" class="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-white dark:hover:bg-neutral-800 dark:focus:bg-neutral-800" tabindex="-1" aria-label="Increase" data-hs-input-number-increment="">
+                                <svg class="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 12h14"></path>
+                                    <path d="M12 5v14"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </app-component-card>
+    </div>
+    <div>
+        <app-component-card title="Kartenvorschau" desc="So sieht Ihre digitale Treuekarte aus, wenn sie zu einer Wallet hinzugefügt wird.">
+            <div class="flex justify-center">
+                <div class="w-80 rounded-2xl shadow-lg overflow-hidden" [ngStyle]="{'background-color': setupService.loyaltyProgram.backgroundColor, 'color': setupService.loyaltyProgram.textColor}">
+                <!-- Header -->
+                <div class="flex justify-between items-center p-2">
+                    <div class="flex items-center">   
+                        <ng-container *ngIf="dataService.currentUser?.shopLogo?.url; else avatar">
+                            <img 
+                            [src]="dataService.apiUrl + dataService.currentUser.shopLogo.url" 
+                            alt="Shop Logo"
+                            class="w-14 h-14 rounded-full object-cover" />
+                        </ng-container>
+
+                        <ng-template #avatar>
+                            <app-avatar-text 
+                            [name]="dataService.currentUser?.username" 
+                            class="w-14 h-14"/>
+                        </ng-template>
+
+                        <span class="block font-bold">{{ dataService.currentUser?.username }}</span>
+                    </div>
+                    <div class="text-right">
+                    <div class="text-xs uppercase text-gray-500">Aktuelle Stempel</div>
+                    <div class="font-bold text-brown-700">{{ setupService.loyaltyProgram.startPoints }} / {{ setupService.loyaltyProgram.maxPoints }}</div>
+                    </div>
+                </div>
+
+                <div class="p-4">
+                    <div class="font-bold text-lg text-brown-700">{{ setupService.loyaltyProgram.programDescription }}</div>
+                </div>
+
+                <!-- Stamp Row -->
+                <div class="bg-gradient-to-r from-brown-200 to-brown-300 px-2 py-2">
+                    <div class="grid grid-cols-4 gap-2 justify-items-center">
+                    <ng-container *ngFor="let i of [].constructor(setupService.loyaltyProgram.maxPoints); let idx = index">
+                        <div
+                        class="w-10 h-10 my-1 flex items-center justify-center rounded-full border-2"
+                        [ngStyle]="{'background-color': idx < setupService.loyaltyProgram.startPoints ? setupService.loyaltyProgram.stampColor : 'transparent', 'border-color': idx < setupService.loyaltyProgram.startPoints ? '#ffffff' : '#D1D5DB'}"
+                        [ngClass]="{
+                            'border-white border-6': idx < setupService.loyaltyProgram.startPoints,
+                            'border-gray-300 bg-white': idx >= setupService.loyaltyProgram.startPoints
+                        }"
+                        >
+                        <ng-container *ngIf="idx < setupService.loyaltyProgram.startPoints"></ng-container>
+                        </div>
+                    </ng-container>
+                    </div>
+                </div>
+
+                <!-- Member Info -->
+                <div class="p-4">
+                    <div class="text-xs uppercase text-gray-500">Mitglied</div>
+                    <div class="font-bold text-brown-700">Max Mustermann</div>
+                </div>
+
+                <!-- QR Code -->
+                <div class="flex flex-col items-center pb-4">
+                    <qr-code [value]="dataService.signUpPageLink + setupService.loyaltyProgram.loyaltyProgramCode"
+                        class="rounded-2xl"
+                        size="140" 
+                        errorCorrectionLevel="M" />
+                    <div class="text-xs text-gray-500 mt-2">{{ setupService.loyaltyProgram.loyaltyProgramCode }}</div>
+                </div>
+                </div>
+            </div>
+        </app-component-card>
+    </div>
+</div>

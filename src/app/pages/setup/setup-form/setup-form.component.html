@@ -1,0 +1,157 @@
+<div class="flex justify-between w-full mb-6">
+    <app-button (click)="linkToCard()" [disabled]="false" size="sm" [startIcon]="setupService.previousIcon" variant="outline">
+        Vorheriger Schritt
+    </app-button>
+    <app-button (click)="linkToFlyer()" [disabled]="!isFormValid()" size="sm" [endIcon]="setupService.nextIcon" variant="outline">
+        Nächster Schritt
+    </app-button>
+</div>
+<div class="flex grid grid-cols-1 gap-5 sm:grid-cols-1 lg:grid-cols-2">
+    <div>
+        <app-component-card title="Formular bearbeiten" desc="Passen Sie das Formular an, das Kunden ausfüllen, um Ihre digitale Treuekarte zu erhalten.">
+            <div>
+                <app-label>Formularbeschreibung</app-label>
+                <app-input-field [value]="setupService.loyaltyProgram.formDescription" (valueChange)="setupService.loyaltyProgram.formDescription = $event"  type="text" placeholder="Bitte füllen Sie dieses Formular aus, um unserem Treueprogramm beizutreten." />
+            </div>
+            <div>
+                <app-label>Absende-Button Text</app-label>
+                <app-input-field  [value]="setupService.loyaltyProgram.formSendButton" (valueChange)="setupService.loyaltyProgram.formSendButton = $event" type="text" placeholder="Stempelkarte anfordern" />
+            </div>
+
+            <div class="max-w-full overflow-x-auto">
+                <app-label>Kundendaten</app-label>
+                <table class="min-w-full">
+                <!-- Table Header -->
+                <thead class="border-b border-gray-100 dark:border-white/[0.05]">
+                    <tr>
+                    <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Feldtyp</th>
+                    <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Aktiviert</th>
+                    <th class="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Erforderlich</th>
+                    </tr>
+                </thead>
+                <!-- Table Body -->
+                <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                    <tr>
+                        <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                            Namensfeld
+                        </td>
+                        <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                            <app-switch
+                            [defaultChecked]="setupService.loyaltyProgram.formNameField"
+                            (valueChange)="setupService.loyaltyProgram.formNameField = $event"
+                            ></app-switch>
+                        </td>
+                        <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                            <app-switch
+                            [defaultChecked]="setupService.loyaltyProgram.formNameFieldMandatory"
+                            (valueChange)="setupService.loyaltyProgram.formNameFieldMandatory = $event"
+                            ></app-switch>
+                        </td>
+                    </tr>
+                    <tr class="cursor-not-allowed opacity-50">
+                        <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                            E-Mail-Feld
+                        </td>
+                        <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                            <app-switch
+                            [defaultChecked]="true"
+                            (valueChange)="true"
+                            ></app-switch>
+                        </td>
+                        <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                            <app-switch
+                            [defaultChecked]="true"
+                            (valueChange)="true"
+                            ></app-switch>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                            Geburtstagsfeld
+                        </td>
+                        <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                            <app-switch
+                            [defaultChecked]="setupService.loyaltyProgram.formBirthdayField"
+                            (valueChange)="setupService.loyaltyProgram.formBirthdayField = $event"
+                            ></app-switch>
+                        </td>
+                        <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                            <app-switch
+                            [defaultChecked]="setupService.loyaltyProgram.formBirthdayFieldMandatory"
+                            (valueChange)="setupService.loyaltyProgram.formBirthdayFieldMandatory = $event"
+                            ></app-switch>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                            Marketing-Einwilligung
+                        </td>
+                        <td class="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                            <app-switch
+                            [defaultChecked]="setupService.loyaltyProgram.formMarketingConsent"
+                            (valueChange)="setupService.loyaltyProgram.formMarketingConsent = $event"
+                            ></app-switch>
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+
+        </app-component-card>
+    </div>
+    <div>
+        <app-component-card title="Formularvorschau" desc="So sieht dein Formular aus, wenn Kunden es ausfüllen, um deine Stempelkarte zu erhalten.">
+            <div class="max-w-md w-full mx-auto">
+                <div class="p-4">
+                    <div class="flex items-center justify-center mb-4">
+                        <ng-container *ngIf="dataService.currentUser?.shopLogo?.url; else avatar">
+                            <img 
+                            [src]="dataService.apiUrl + dataService.currentUser.shopLogo.url" 
+                            alt="Shop Logo"
+                            class="w-32 h-32 rounded-full object-cover" />
+                        </ng-container>
+
+                        <ng-template #avatar>
+                            <app-avatar-text 
+                            [name]="dataService.currentUser?.username" 
+                            class="w-12 h-12"/>
+                            <span class="block font-bold">{{ dataService.currentUser?.username }}</span>
+                        </ng-template>
+                    </div>
+                    <div class="text-md text-center text-gray-500 dark:text-gray-400 mb-4">{{ setupService.loyaltyProgram.formDescription }}</div>
+                    <form class="space-y-4">
+                        <div *ngIf="setupService.loyaltyProgram.formNameField">
+                            <div class="flex flex-row"><app-label>Name</app-label><span *ngIf="setupService.loyaltyProgram.formNameFieldMandatory" class="text-red-500 ml-1">*</span></div>
+                            <app-input-field type="text" placeholder="Geben Sie hier Ihren Namen ein" />
+                        </div>
+                        <div>
+                            <app-label>E-Mail <span class="text-red-500">*</span></app-label>
+                            <app-input-field type="email" placeholder="Geben Sie hier Ihre E-Mail-Adresse ein" />
+                        </div>
+                        <div *ngIf="setupService.loyaltyProgram.formBirthdayField">
+                            <div class="flex flex-row"><app-label>Geburtstag</app-label><span *ngIf="setupService.loyaltyProgram.formBirthdayFieldMandatory" class="text-red-500 ml-1">*</span></div>
+                            <app-input-field type="date" placeholder="Wählen Sie Ihr Geburtsdatum" />
+                        </div>
+                        <div *ngIf="setupService.loyaltyProgram.formMarketingConsent">
+                            <label class="inline-flex items-center">
+                                <app-checkbox className="w-5 h-5" [checked]="true" />
+                                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Ich stimme zu, Marketingmitteilungen für dieses Treueprogramm zu erhalten.</span>
+                            </label>
+                        </div>
+                        <div>
+                            <label class="inline-flex items-center">
+                                <app-checkbox className="w-5 h-5" [checked]="true" />
+                                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Ich habe die <a class="text-brand-500" target="_blank" href="https://www.happywallet.at/datenschutz.html">Nutzungsbedingungen</a> gelesen und stimme zu.</span>
+                            </label>
+                        </div>
+                        <div>
+                            <app-button size="sm" variant="outline">
+                               {{ setupService.loyaltyProgram.formSendButton }}
+                            </app-button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </app-component-card>
+    </div>
+</div>
