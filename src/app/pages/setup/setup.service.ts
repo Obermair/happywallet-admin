@@ -270,8 +270,12 @@ export class SetupService {
   private async addLogo(pdfDoc: PDFDocument, page: PDFPage, logoUrl?: string) {
     const logoUrlParam = logoUrl || '../../assets/images/logo-happywallet.png';
     const logoBytes = await fetch(logoUrlParam).then(res => res.arrayBuffer());
-    const logoImage = await pdfDoc.embedPng(logoBytes);
-  
+    
+    // Einbetten des Logos als PNG / JPEG / JPG
+    const logoImage = logoUrlParam.endsWith('.png') ?
+      await pdfDoc.embedPng(logoBytes) :
+      await pdfDoc.embedJpg(logoBytes);
+
     const logoDimsWidth = 170;
     const logoDimsHeight = (logoImage.height / logoImage.width) * logoDimsWidth;
   
