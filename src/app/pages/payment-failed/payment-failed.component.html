@@ -1,0 +1,29 @@
+<div class="relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden z-1">
+  <app-grid-shape />
+
+  <div class="mx-auto w-full max-w-[242px] text-center sm:max-w-[472px]">
+    
+    <!--Logo-->
+    <a routerLink="/" class="inline-block mb-6 sm:mb-10">
+      <img class="dark:hidden" src="/images/logo/logo2.png" style="max-width: 150px;" alt="Logo" />
+      <img class="hidden dark:block" src="/images/logo/logo2-white.png" alt="Logo" />
+    </a>
+    
+    <h1 class="mb-8 font-bold text-gray-800 text-title-md dark:text-white/90 xl:text-title-2xl">
+        Leider ist bei der Zahlungsabwicklung ein Fehler aufgetreten
+    </h1>
+
+    <p class="mt-10 mb-6 text-base text-gray-700 dark:text-gray-400 sm:text-lg">
+        Bitte versuchen Sie es erneut oder kontaktieren Sie unseren Support, wenn das Problem weiterhin besteht.
+    </p>
+
+    <a routerLink="/subscription"
+      class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-3.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+      Erneut versuchen
+    </a>
+  </div>
+
+  <p class="absolute text-sm text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400">
+    &copy; {{ currentYear }} - happywallet
+  </p>
+</div>

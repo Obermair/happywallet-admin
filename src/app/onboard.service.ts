@@ -12,69 +12,73 @@ export class OnboardGuardService implements CanActivate {
     return this.dataService.getCurrentUserPromise().then((user: any) => {
       const profileComplete = !!(user?.shopLogo?.url && user?.username);
       const firstProgramAdded = user?.loyalty_programs && user.loyalty_programs.length > 0;
-      const subscriptionType = user?.subscriptionType;
-      const subscribeDate = user?.subscribeDate ? new Date(user.subscribeDate) : null;
-
+      const subscriptionStatus = user?.subscriptionStatus;
+      
       // 1) Wenn Ziel = /setup
       if (url === '/setup/profile' || url === '/setup/card' || url === '/setup/form' || url === '/setup/flyer') {
         // Wenn Profil schon komplett → zurück zum Dashboard
         if (profileComplete && firstProgramAdded) {
-          this.router.navigate(['/']);
-          return false;
-        }
-
-        // Profil unvollständig → Zugriff auf /setup erlauben
-        return true;
-      }
-
-      // 2) Wenn Ziel = /subscription
-      if (url === '/subscription') {
-        // kein Abo → Zugriff erlauben (User soll subscriben)
-        if (!subscriptionType) return true;
-
-        // trial → prüfen ob abgelaufen
-        if (subscriptionType === 'trial' && subscribeDate) {
-          const diffDays = Math.ceil(Math.abs(Date.now() - subscribeDate.getTime()) / (1000 * 60 * 60 * 24));
-          if (diffDays > 14) {
-            // trial abgelaufen → erlaubt, damit er subscriben kann
-            return true;
-          } else {
-            // trial noch aktiv → zurück zum Dashboard
+          if (subscriptionStatus === 'active' || subscriptionStatus === 'trialing') {
             this.router.navigate(['/']);
+            return false;
+          } 
+          if (subscriptionStatus === 'canceled') {
+            this.router.navigate(['/subscription']);
+            return false;
+          }
+          if (!subscriptionStatus) {
+            this.router.navigate(['/subscription']);
             return false;
           }
         }
-
-        // subscriptionType ist 'basic' (oder anderes aktives Abo) → kein Zugriff auf /subscription
+        // Profil unvollständig → Zugriff auf /setup erlauben
+        return true;
+      }
+      
+      // 2) Wenn Ziel = /subscription
+      if (url === '/subscription') {
+        // Wenn Profil unvollständig → weiter zu /setup/profile
+        if (!profileComplete || !firstProgramAdded) {
+          this.router.navigate(['/setup/profile']);
+          return false;
+        }
+        // Profil komplett, aber kein aktives Abo → Zugriff auf /subscription erlauben
+        if (subscriptionStatus !== 'active' && subscriptionStatus !== 'trialing') {
+          return true;
+        }
+        // Profil komplett und aktives Abo → zurück zum Dashboard
         this.router.navigate(['/']);
         return false;
       }
-
-      // 3) Für alle anderen App-Routen: require profile + valid subscription
-      if (!profileComplete) {
+      // 3) Wenn Ziel = /
+      if (url === '/') {
+        // Wenn Profil unvollständig → weiter zu /setup/profile
+        if (!profileComplete || !firstProgramAdded) {
+          this.router.navigate(['/setup/profile']);
+          return false;
+        }
+        // Profil komplett, aber kein aktives Abo → weiter zu /subscription
+        if (subscriptionStatus !== 'active' && subscriptionStatus !== 'trialing') {
+          this.router.navigate(['/subscription']);
+          return false;
+        }
+        // Profil komplett und aktives Abo → Zugriff auf Dashboard erlauben
+        return true;
+      }
+      
+      // 4) Alle anderen URLs
+      // Wenn Profil unvollständig → weiter zu /setup/profile
+      if (!profileComplete || !firstProgramAdded) {
         this.router.navigate(['/setup/profile']);
         return false;
       }
-
-      if (!firstProgramAdded) {
-        this.router.navigate(['/setup/card']);
-        return false;
-      }
-
-      if (!subscriptionType) {
+      // Profil komplett, aber kein aktives Abo → weiter zu /subscription
+      if (subscriptionStatus !== 'active' && subscriptionStatus !== 'trialing') {
         this.router.navigate(['/subscription']);
         return false;
       }
 
-      if (subscriptionType === 'trial' && subscribeDate) {
-        const diffDays = Math.ceil(Math.abs(Date.now() - subscribeDate.getTime()) / (1000 * 60 * 60 * 24));
-        if (diffDays > 14) {
-          this.router.navigate(['/subscription']);
-          return false;
-        }
-      }
-
-      // alles ok
+      // Profil komplett und aktives Abo → Zugriff erlauben
       return true;
     }).catch(err => {
       console.error('OnboardGuard Fehler', err);

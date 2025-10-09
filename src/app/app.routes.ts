@@ -36,6 +36,7 @@ import { SetupProfileComponent } from './pages/setup/setup-profile/setup-profile
 import { SetupCardComponent } from './pages/setup/setup-card/setup-card.component';
 import { SetupFormComponent } from './pages/setup/setup-form/setup-form.component';
 import { SetupFlyerComponent } from './pages/setup/setup-flyer/setup-flyer.component';
+import { PaymentFailedComponent } from './pages/payment-failed/payment-failed.component';
 
 export const routes: Routes = [
   {
@@ -93,6 +94,7 @@ export const routes: Routes = [
   // public/auth pages (keine AppLayout)
   { path:'auth/google/callback', component: GoogleCallbackComponent, title:'happywallet - your digital loyalty card' },
   { path:'email-confirmation', component: EmailConfirmedComponent, title:'happywallet - your digital loyalty card' },
+  { path:'payment-failed', component: PaymentFailedComponent, title:'happywallet - your digital loyalty card' },
   { path:'forgot-password', component: ForgotPasswordComponent, title:'happywallet - your digital loyalty card' },
   { path:'reset-password', component: ResetPasswordComponent, title:'happywallet - your digital loyalty card' },
   { path:'signin', component: SignInComponent, title:'happywallet - your digital loyalty card' },
