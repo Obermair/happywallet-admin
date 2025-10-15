@@ -180,6 +180,20 @@ export class DataService  {
     });
   }
 
+  public deleteLoyaltyProgram(programId: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.http.delete(this.apiUrl + '/api/loyalty-programs/' + programId).subscribe(
+        (data: any) => {
+          resolve(data);
+        },
+        (err: Error) => {
+          console.error('Error deleting loyalty program:', err);
+          reject(err);
+        }
+      );
+    });
+  }
+
   public updateLoyaltyProgramWithoutId(programData: any){
     const program = this.loyaltyPrograms?.find(
       (p: any) => p.attributes.loyaltyProgramCode === programData.loyaltyProgramCode
@@ -564,5 +578,20 @@ export class DataService  {
       );
     });
   }
+
+  getInvoices(){
+    return new Promise((resolve, reject) => {
+      this.http.get(this.apiUrl + '/api/invoices/' + this.currentUser.stripeCustomerId).subscribe(
+        (data: any) => {
+          resolve(data);
+        },
+        (err: Error) => {
+          console.error('Error fetching invoices:', err);
+          reject(err);
+        }
+      );
+    });
+  }
+
 }
 

@@ -39,10 +39,6 @@ export class SigninFormComponent {
 
   ngOnInit() {
     window.addEventListener("message", (event) => {
-      if (event.origin !== window.location.origin) {
-        this.errorMessage = "Login fehlgeschlagen: Bitte versuchen Sie es erneut.";
-        return;
-      }
       if (event.data.jwt) {    
         console.log("Google Sign-In erfolgreich");
         localStorage.setItem('jwt_token', event.data.jwt);

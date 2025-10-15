@@ -45,6 +45,7 @@ export class CustomersComponent {
 
   selectedCustomerRows: string[] = [];
   selectAllCustomers: boolean = false;
+  loading: boolean = true;
 
   selectedValue = '';
   selectedValues: string[] = [];
@@ -88,6 +89,10 @@ export class CustomersComponent {
     this.dataService.getCustomersByLoyaltyPrograms(this.selectedValues).then((customers: any) => {
       this.customers = customers;
       this.filterByLastInteraction(this.customers);
+
+      if(this.customers.length === 0){
+        this.loading = false;
+      }
 
       // Fetch loyalty programs for each customer
       this.customers.forEach(customer => {
@@ -274,6 +279,7 @@ export class CustomersComponent {
 
     this.dataService.getLoyaltyProgramsForCustomer(programUserIds).then((programs: any) => {
       customer.loyaltyPrograms = programs;
+      this.loading = false;
     });
   }
 

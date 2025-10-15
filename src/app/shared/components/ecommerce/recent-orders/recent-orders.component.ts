@@ -30,15 +30,8 @@ import { AvatarTextComponent } from '../../ui/avatar/avatar-text.component';
 })
 export class RecentOrdersComponent {
 
-  lastFiveCustomers: any[] = [
-    // Example structure of customer data
-    // { customerName: 'John Doe', customerEmail: 'john.doe@example.com' }
-    { customerName: 'John Doe', customerEmail: 'john.doe@example.com' },
-    { customerName: 'Jane Smith', customerEmail: 'jane.smith@example.com' },
-    { customerName: 'Alice Johnson', customerEmail: 'alice.johnson@example.com' },
-    { customerName: 'Bob Brown', customerEmail: 'bob.brown@example.com' },
-    { customerName: 'Charlie Davis', customerEmail: 'charlie.davis@example.com' }
-  ];
+  lastFiveCustomers: any[] = [];
+  loading: boolean = true;
 
   constructor(public dataService: DataService) { }
   
@@ -47,6 +40,7 @@ export class RecentOrdersComponent {
       if (userId) {
         this.dataService.getLastFiveCustomers(userId).then((data: any) => {
           this.lastFiveCustomers = data;
+          this.loading = false;
 
           // order by updatedAt descending
           this.lastFiveCustomers.sort((a, b) => {

@@ -9,6 +9,14 @@
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-2">
               Dein aktueller Plan: {{ currentPlanTitle }}
             </h3>
+            <app-badge
+              *ngIf="dataService.currentUser.stripeCancelAt"
+              variant="light"
+              color="error"
+              size="sm"
+              >
+              wird am {{ dataService.currentUser.stripeCancelAt | date }} beendet
+              </app-badge>
             <p class="mt-2 text-base/7 text-gray-600 dark:text-gray-300">Mit happywallet ist alles für deine digitale Stempelkarte in einem Plan inkludiert – einfach und fair.</p>
             <div class="mt-4 flex items-center gap-x-4">
               <h4 class="flex-none text-sm/6 font-semibold text-brand-600 dark:text-brand-400">Was alles dabei ist</h4>
@@ -49,11 +57,8 @@
                   <span class="text-5xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ currentPlanPrice }}</span>
                   <span class="text-sm/6 font-semibold tracking-wide text-gray-600 dark:text-gray-400">pro Monat</span>
                 </p>
-                <!-- 
-                <a href="#" class="mt-4 block w-full rounded-md bg-gray-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-brand-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:bg-brand-500 dark:shadow-none dark:hover:bg-brand-400 dark:focus-visible:outline-brand-500">Jetzt abonnieren</a>
-                Fall back button for unsubscribe -  -->
-
-                <a (click)="showUnsubscribeModal = true" class="cursor-pointer mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-center text-sm text-gray-900 hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:border-gray-700 dark:text-white/90 dark:hover:bg-white/[0.03] dark:focus-visible:outline-brand-500">Abo kündigen</a>
+                <div *ngIf="errorMessage" class="mt-2 text-xs/5 text-red-600 dark:text-red-400">{{ errorMessage }}</div>
+                <a *ngIf="!dataService.currentUser.temporaryUse" (click)="showUnsubscribeModal = true" class="cursor-pointer mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-center text-sm text-gray-900 hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:border-gray-700 dark:text-white/90 dark:hover:bg-white/[0.03] dark:focus-visible:outline-brand-500">Abo kündigen</a>
 
                 <p class="mt-2 text-xs/5 text-gray-600 dark:text-gray-400">{{ planInformationText }}</p>
               </div>
@@ -65,7 +70,7 @@
     <!-- Rechnungen -->
     <app-component-card class="mt-6" title="Rechnungen" desc="Hier findest du eine Übersicht deiner bisherigen Rechnungen.">
       <div>
-        <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+        <div class="overflow-x-auto rounded-2xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
           <table class="min-w-full">
             <thead class="px-6 py-3.5 border-t border-gray-100 border-y bg-gray-50 dark:border-white/[0.05] dark:bg-gray-900">
               <tr>
@@ -78,26 +83,45 @@
                 <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
                   Status
                 </th>
+                <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+                  Häufigkeit
+                </th>
+                <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">
+                  Rechnungsnummer
+                </th>
                 <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-end">
-                  Aktion
+                  Rechnung PDF
+                </th>
+                <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-end">
+                  Rechnungsdetails
                 </th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              <tr>
+              <tr *ngFor="let invoice of invoices">
                 <td class="px-6 py-4 sm:px-6 text-sm leading-5 text-gray-500 dark:text-gray-400">
-                  12. Juni 2024
+                  {{ invoice?.created ? (invoice.created * 1000 | date:'dd. MMMM yyyy') : '' }}
                 </td>
                 <td class="px-6 py-4 sm:px-6 text-sm leading-5 text-gray-500 dark:text-gray-400">
-                  €9,00
+                  {{ invoice?.amount_due / 100 | currency: 'EUR'}}
                 </td>
                 <td class="px-6 py-4 sm:px-6 text-sm leading-5">
                   <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-800/20 dark:text-green-200">
                     Bezahlt
                   </span>
                 </td>
+                <td class="px-6 py-4 sm:px-6 text-sm flex flex-row leading-5 text-gray-500 dark:text-gray-400">
+                  <svg style="margin-right: 4px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+                  Monatlich
+                </td>
+                <td class="px-6 py-4 sm:px-6 text-sm leading-5 text-gray-500 dark:text-gray-400">
+                  {{ invoice?.number }}
+                </td>
                 <td class="px-6 py-4 sm:px-6 text-sm leading-5 justify-end text-end">
-                  <a href="#" class="font-medium text-gray-900 dark:text-gray-100">Rechnung herunterladen</a>
+                  <a [href]="invoice?.invoice_pdf" class="font-medium text-gray-900 dark:text-gray-100">Rechnung herunterladen</a>
+                </td>
+                <td class="px-6 py-4 sm:px-6 text-sm leading-5 justify-end text-end">
+                  <a [href]="invoice?.hosted_invoice_url" target="_blank" class="font-medium text-gray-900 dark:text-gray-100">Rechnungsdetails</a>
                 </td>
               </tr>
             </tbody>
