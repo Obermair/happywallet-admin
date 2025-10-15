@@ -43,8 +43,7 @@ export class ProfileComponent {
 
   setText() {
     if (this.dataService.currentUser.subscriptionStatus == 'trialing') {
-      console.log(this.dataService.currentUser);
-      if ( this.dataService.currentUser.temporaryUse) {
+      if (this.dataService.currentUser.temporaryUse) {
         this.currentPlanTitle = 'Testphase (kostenlos)';
         this.currentPlanPrice = '€0';
         if (this.dataService.currentUser.stripeCancelAt) {
@@ -59,7 +58,7 @@ export class ProfileComponent {
           if (this.calculateDaysLeft(this.dataService.currentUser.stripeCurrentPeriodEnd, false) == 0) {
             this.planInformationText = 'Dein Abo wird heute abgebucht.';
           } else {
-            this.planInformationText = 'Du hast noch ' + this.calculateDaysLeft(this.dataService.currentUser.stripeCurrentPeriodEnd, true) + ' Tage bis zur nächsten Abrechnung.';
+            this.planInformationText = 'Du hast noch ' + this.calculateDaysLeft(this.dataService.currentUser.stripeCurrentPeriodEnd, false) + ' Tage bis zur nächsten Abrechnung.';
           }
         }
       }
@@ -78,7 +77,7 @@ export class ProfileComponent {
           if (this.calculateDaysLeft(this.dataService.currentUser.stripeCurrentPeriodEnd, false) == 0) {
             this.planInformationText = 'Dein Abo wird heute abgebucht.';
           } else {
-            this.planInformationText = 'Du hast noch ' + this.calculateDaysLeft(this.dataService.currentUser.stripeCurrentPeriodEnd, true) + ' Tage bis zur nächsten Abrechnung.';
+            this.planInformationText = 'Du hast noch ' + this.calculateDaysLeft(this.dataService.currentUser.stripeCurrentPeriodEnd, false) + ' Tage bis zur nächsten Abrechnung.';
           }
         }
       }
