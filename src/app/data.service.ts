@@ -8,7 +8,7 @@ import { loadStripe } from '@stripe/stripe-js';
 })
 export class DataService  {
   public apiUrl = 'https://api.happywallet.at'; 
-  public signUpPageLink = 'https://signup.happywallet.at/?loyaltyProgram=';
+  public signUpPageLink = 'https://signup.happywallet.at/signin/';
   public currentUser: any = null;
   public loyaltyPrograms: any;
 
@@ -139,7 +139,16 @@ export class DataService  {
     return new Promise((resolve, reject) => {
       this.http.post(this.apiUrl + '/api/loyalty-programs', { data: programData }).subscribe(
         (data: any) => {
-          resolve(data);
+          // POST to /api/google-pass/class/:loyaltyprogramid
+          this.http.post(this.apiUrl + '/api/google-pass/class/' + data.data.id, {}).subscribe(
+            (gwData: any) => {
+              resolve(data);
+            },
+            (err: Error) => {
+              console.error('Error creating Google Wallet class:', err);
+              reject(err);
+            }
+          );
         },
         (err: Error) => {
           console.error('Error creating loyalty program:', err);
@@ -170,7 +179,16 @@ export class DataService  {
      return new Promise((resolve, reject) => {
         this.http.put(this.apiUrl + '/api/loyalty-programs/' + programData.id, { data: programData.attributes }).subscribe(
           (data: any) => {
-            resolve(data);
+            console.log('Loyalty program updated:', data);
+            this.http.post(this.apiUrl + '/api/google-pass/class/' + data.data.id, {}).subscribe(
+            (gwData: any) => {
+              resolve(data);
+            },
+            (err: Error) => {
+              console.error('Error creating Google Wallet class:', err);
+              reject(err);
+            }
+          );
           },
           (err: Error) => {
             console.error('Error creating loyalty program:', err);
@@ -202,8 +220,15 @@ export class DataService  {
     return new Promise((resolve, reject) => {
         this.http.put(this.apiUrl + '/api/loyalty-programs/' + program.id, { data: programData }).subscribe(
           (data: any) => {
-            resolve(data);
-          },
+            this.http.post(this.apiUrl + '/api/google-pass/class/' + data.data.id, {}).subscribe(
+            (gwData: any) => {
+              resolve(data);
+            },
+            (err: Error) => {
+              console.error('Error creating Google Wallet class:', err);
+              reject(err);
+            },
+          )},
           (err: Error) => {
             console.error('Error creating loyalty program:', err);
             reject(err);

@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <div>
-                        <qr-code [value]="signupLink"
+                        <qr-code [value]="dataService.signUpPageLink + card?.attributes?.loyaltyProgramCode"
                         class="rounded-2xl"
                         size="150" 
                         errorCorrectionLevel="M" />
@@ -83,6 +83,7 @@
                         class="w-full"
                         size="md"
                         variant="outline"
+                        [disabled]="card?.attributes?.program_users?.data.length > 0"
                         [startIcon]="editIcon"
                         (click)="updateLoyaltyProgram(card)"
                     >
