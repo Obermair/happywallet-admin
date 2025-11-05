@@ -34,6 +34,7 @@ export class LoyaltyProgramsComponent implements OnInit {
 
   public deleteCard: any = null;
   public deleteCardToggle: boolean = false;
+  public showCopiedInfo = false;
 
   constructor(private router: Router, public dataService: DataService, public stepperService: StepperService){
   }
@@ -43,6 +44,10 @@ export class LoyaltyProgramsComponent implements OnInit {
   }
 
   copyToClipboard(text: string) {
+    this.showCopiedInfo = true;
+    setTimeout(() => {
+      this.showCopiedInfo = false;
+    }, 2000);
     navigator.clipboard.writeText(text);
   }
 

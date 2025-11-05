@@ -20,9 +20,7 @@ import { BadgeComponent } from '../../shared/components/ui/badge/badge.component
     CommonModule,
     PageBreadcrumbComponent,
     UserMetaCardComponent,
-    ComponentCardComponent,
-    ModalComponent,
-    BadgeComponent
+    ModalComponent
   ],
   templateUrl: './profile.component.html',
   styles: ``
