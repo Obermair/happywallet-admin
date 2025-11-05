@@ -64,6 +64,7 @@
             <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Email</th>
             <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Geburtstag</th>
             <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Beigetreten am</th>
+            <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Marketing Consent</th>
             <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Letzte Interaktion</th>
             <th class="px-6 py-3 font-medium text-gray-500 sm:px-6 text-theme-xs dark:text-gray-400 text-start">Stempelkarten</th>
             </tr>
@@ -108,6 +109,17 @@
             <td class="px-4 sm:px-6 py-3.5">
                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
                 {{ customer.attributes.createdAt ? (customer.attributes.createdAt | date:'dd.MM.yyyy') : '-' }}
+            </td>
+            <td class="px-4 sm:px-6 py-3.5">
+                <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+                <app-badge
+                    variant="light"
+                    [color]="customer.attributes.marketingConsent ? 'success' : 'error'"
+                    size="sm"
+                    >
+                    {{ customer.attributes.marketingConsent ? 'Ja' : 'Nein' }}
+                    </app-badge>
+                </p>
             </td>
             <td class="px-4 sm:px-6 py-3.5">
                 <p class="text-gray-700 text-theme-sm dark:text-gray-400">
