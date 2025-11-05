@@ -8,7 +8,7 @@ import { loadStripe } from '@stripe/stripe-js';
 })
 export class DataService  {
   public apiUrl = 'https://api.happywallet.at'; 
-  public signUpPageLink = 'https://signup.happywallet.at/signin/';
+  public signUpPageLink = 'https://customer.happywallet.at/signin/';
   public currentUser: any = null;
   public loyaltyPrograms: any;
 
