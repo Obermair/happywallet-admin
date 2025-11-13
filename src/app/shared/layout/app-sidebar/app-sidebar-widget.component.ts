@@ -25,7 +25,7 @@ import { Component } from '@angular/core';
 </a>
 
 <a
-  href="https://apps.apple.com/us/app/happywallet-for-business/id6754761944"
+  href="https://apps.apple.com/ch/app/happywallet-for-business/id6754761944"
   target="_blank"
   rel="nofollow"
   class="flex items-center mt-3 justify-center p-3 font-medium text-brand-500 rounded-lg border border-brand-500 border-2 text-theme-sm hover:bg-gray-100"
